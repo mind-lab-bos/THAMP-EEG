@@ -159,6 +159,8 @@ noctT = log2(hfT)-log2(lfT);               % number of octaves
 NT = noctT*nperT+1;                        % Total number of bins
 cfT = logspace(log10(lfT),log10(hfT),NT);  % Log spaced bin center frequencies
 
+%DOCUMENT calcPSD to add to path
+
 % [EEGPSDa, cfT] = calcPSD(EEGa, lfT, hfT, windowT, overlapT); % write PSDs
 % [EEGPSDb, cfT] = calcPSD(EEGb, lfT, hfT, windowT, overlapT); % write PSDs
 % [EEGPSDc, cfT] = calcPSD(EEGc, lfT, hfT, windowT, overlapT); % write PSDs
@@ -737,733 +739,798 @@ songtitles = {'Hello'
 EEG = pop_loadset('filename',[ID '_filt_reref_resamp_rej_interp_prunedICA_epochs.set'],'filepath',fullpath);
 [ALLEEG, EEG, CURRENTSET] = eeg_store( ALLEEG, EEG, 0 );
 
-%SONG 1
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd1m,1),'b')
-hold on
-plot(cfT,mean(psd1u,1),'r')
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 1 :', songtitles{1}))
-[ d, ix ] = min(abs(cfT-thetasong(1))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd1m(:) == 0),topoplot(psd1m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd1u), mean(psd1m)]), max([mean(psd1u), mean(psd1m)])])
-colorbar
-title("Avg Modded Song 1 at "+string(thetasong(1))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd1u(:) == 0),topoplot(psd1u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd1u), mean(psd1m)]), max([mean(psd1u), mean(psd1m)])])
-colorbar
-title("Avg Unmodded Song 1 at "+string(thetasong(1))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song1.fig')
-saveas(gcf,'Song1.png')
+% song plot loop
+for k = 1:length(songtitles)
+    if k == 1, psdkm = psd1m; psdku = psd1u; end
+    if k == 2, psdkm = psd2m; psdku = psd2u; end
+    if k == 3, psdkm = psd3m; psdku = psd3u; end
+    if k == 4, psdkm = psd4m; psdku = psd4u; end
+    if k == 5, psdkm = psd5m; psdku = psd5u; end
+    if k == 6, continue; end %this song is not included
+    if k == 7, psdkm = psd7m; psdku = psd7u; end
+    if k == 8, psdkm = psd8m; psdku = psd8u; end
+    if k == 9, psdkm = psd9m; psdku = psd9u; end
+    if k == 10, psdkm = psd10m; psdku = psd10u; end
+    if k == 11, psdkm = psd11m; psdku = psd11u; end
+    if k == 12, psdkm = psd12m; psdku = psd12u; end
+    if k == 13, psdkm = psd13m; psdku = psd13u; end
+    if k == 14, psdkm = psd14m; psdku = psd14u; end
+    if k == 15, continue; end %this song is not included
+    if k == 16, psdkm = psd16m; psdku = psd16u; end
+    if k == 17, psdkm = psd17m; psdku = psd17u; end
+    if k == 18, psdkm = psd18m; psdku = psd18u; end
+    if k == 19, psdkm = psd19m; psdku = psd19u; end
+    if k == 20, psdkm = psd20m; psdku = psd20u; end
+    if k == 21, psdkm = psd21m; psdku = psd21u; end
+    if k == 22, psdkm = psd22m; psdku = psd22u; end
+    if k == 23, psdkm = psd23m; psdku = psd23u; end
+    if k == 24, psdkm = psd24m; psdku = psd24u; end
+    if k == 25, psdkm = psd25m; psdku = psd25u; end
+    if k == 26, psdkm = psd26m; psdku = psd26u; end
+    if k == 27, psdkm = psd27m; psdku = psd27u; end
+    if k == 28, psdkm = psd28m; psdku = psd28u; end
+    if k == 29, psdkm = psd29m; psdku = psd29u; end
+    if k == 30, psdkm = psd30m; psdku = psd30u; end
+    if k == 31, psdkm = psd31m; psdku = psd31u; end
+    if k == 32, psdkm = psd32m; psdku = psd32u; end
 
-%song 2
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd2m,1))
-hold on
-plot(cfT,mean(psd2u,1))
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 2 :', songtitles{2}))
-[ d, ix ] = min(abs(cfT-thetasong(2))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd2m(:) == 0),topoplot(psd2m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd2u), mean(psd2m)]), max([mean(psd2u), mean(psd2m)])])
-colorbar
-title("Avg Modded Song 2 at "+string(thetasong(2))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd2u(:) == 0),topoplot(psd2u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd2u), mean(psd2m)]), max([mean(psd2u), mean(psd2m)])])
-colorbar
-title("Avg Unmodded Song 2 at "+string(thetasong(2))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song2.fig')
-saveas(gcf,'Song2.png')
-
-%song 3
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd3m,1))
-plot(cfT,mean(psd3u,1))
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 3 :', songtitles{3}))
-[ d, ix ] = min(abs(cfT-thetasong(3))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd3m(:) == 0),topoplot(psd3m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd3u), mean(psd3m)]), max([mean(psd3u), mean(psd3m)])])
-colorbar
-title("Avg Modded Song 3 at "+string(thetasong(3))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd3u(:) == 0),topoplot(psd3u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd3u), mean(psd3m)]), max([mean(psd3u), mean(psd3m)])])
-colorbar
-title("Avg Unmodded Song 3 at "+string(thetasong(3))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song3.fig')
-saveas(gcf,'Song3.png')
-
-%song 4
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd4m,1))
-plot(cfT,mean(psd4u,1))
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 4 :', songtitles{4}))
-[ d, ix ] = min(abs(cfT-thetasong(4))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd4m(:) == 0),topoplot(psd4m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd4u), mean(psd4m)]), max([mean(psd4u), mean(psd4m)])])
-colorbar
-title("Avg Modded Song 4 at "+string(thetasong(4))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd4u(:) == 0),topoplot(psd4u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd4u), mean(psd4m)]), max([mean(psd4u), mean(psd4m)])])
-colorbar
-title("Avg Unmodded Song 4 at "+string(thetasong(4))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song4.fig')
-saveas(gcf,'Song4.png')
-
-%
-%SONG 5
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd5m,1),'b')
-hold on
-plot(cfT,mean(psd5u,1),'r')
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 5 :', songtitles{5}))
-[ d, ix ] = min(abs(cfT-thetasong(5))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd5m(:) == 0),topoplot(psd5m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd5u), mean(psd5m)]), max([mean(psd5u), mean(psd5m)])])
-colorbar
-title("Avg Modded Song 5 at "+string(thetasong(5))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd5u(:) == 0),topoplot(psd5u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd5u), mean(psd5m)]), max([mean(psd5u), mean(psd5m)])])
-colorbar
-title("Avg Unmodded Song 5 at "+string(thetasong(5))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song5.fig')
-saveas(gcf,'Song5.png')
-
-%SONG 6
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd6m,1),'b')
-hold on
-plot(cfT,mean(psd6u,1),'r')
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 6 :', songtitles{6}))
-[ d, ix ] = min(abs(cfT-thetasong(6))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd6m(:) == 0),topoplot(psd6m(:,ix),EEG.chanlocs,'electrodes','off');clim([min([mean(psd6u), mean(psd6m)]), max([mean(psd6u), mean(psd6m)])]);colorbar;end
-title("Avg Modded Song 6 at "+string(thetasong(6))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd6u(:) == 0),topoplot(psd6u(:,ix),EEG.chanlocs,'electrodes','off');clim([min([mean(psd6u), mean(psd6m)]), max([mean(psd6u), mean(psd6m)])]);colorbar;end
-title("Avg Unmodded Song 6 at "+string(thetasong(6))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song6.fig')
-saveas(gcf,'Song6.png')
-
-%SONG 7
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd7m,1),'b')
-hold on
-plot(cfT,mean(psd7u,1),'r')
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 7 :', songtitles{7}))
-[ d, ix ] = min(abs(cfT-thetasong(7))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd7m(:) == 0),topoplot(psd7m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd7u), mean(psd5m)]), max([mean(psd7u), mean(psd7m)])])
-colorbar
-title("Avg Modded Song 7 at "+string(thetasong(7))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd7u(:) == 0),topoplot(psd7u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd7u), mean(psd7m)]), max([mean(psd7u), mean(psd7m)])])
-colorbar
-title("Avg Unmodded Song 7 at "+string(thetasong(7))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song7.fig')
-saveas(gcf,'Song7.png')
-
-%SONG 8
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd8m,1),'b')
-hold on
-plot(cfT,mean(psd8u,1),'r')
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 8 :', songtitles{8}))
-[ d, ix ] = min(abs(cfT-thetasong(8))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd8m(:) == 0),topoplot(psd8m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd8u), mean(psd8m)]), max([mean(psd8u), mean(psd8m)])])
-colorbar
-title("Avg Modded Song 8 at "+string(thetasong(8))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd8u(:) == 0),topoplot(psd8u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd8u), mean(psd8m)]), max([mean(psd8u), mean(psd8m)])])
-colorbar
-title("Avg Unmodded Song 8 at "+string(thetasong(8))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song8.fig')
-saveas(gcf,'Song8.png')
-
-%SONG 9
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd9m,1),'b')
-hold on
-plot(cfT,mean(psd9u,1),'r')
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 9 :', songtitles{9}))
-[ d, ix ] = min(abs(cfT-thetasong(9))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd9m(:) == 0),topoplot(psd9m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd9u), mean(psd9m)]), max([mean(psd9u), mean(psd9m)])])
-colorbar
-title("Avg Modded Song 9 at "+string(thetasong(9))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd9u(:) == 0),topoplot(psd9u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd9u), mean(psd9m)]), max([mean(psd9u), mean(psd9m)])])
-colorbar
-title("Avg Unmodded Song 9 at "+string(thetasong(9))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song9.fig')
-saveas(gcf,'Song9.png')
-
-%SONG 10
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd10m,1),'b')
-hold on
-plot(cfT,mean(psd10u,1),'r')
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 10 :', songtitles{10}))
-[ d, ix ] = min(abs(cfT-thetasong(10))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd10m(:) == 0),topoplot(psd10m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd10u), mean(psd10m)]), max([mean(psd10u), mean(psd10m)])])
-colorbar
-title("Avg Modded Song 10 at "+string(thetasong(10))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd10u(:) == 0),topoplot(psd10u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd10u), mean(psd10m)]), max([mean(psd10u), mean(psd10m)])])
-colorbar
-title("Avg Unmodded Song 10 at "+string(thetasong(10))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song10.fig')
-saveas(gcf,'Song10.png')
-
-%SONG 11
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd11m,1),'b')
-hold on
-plot(cfT,mean(psd11u,1),'r')
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 11 :', songtitles{11}))
-[ d, ix ] = min(abs(cfT-thetasong(11))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd11m(:) == 0),topoplot(psd11m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd11u), mean(psd11m)]), max([mean(psd11u), mean(psd11m)])])
-colorbar
-title("Avg Modded Song 11 at "+string(thetasong(11))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd11u(:) == 0),topoplot(psd11u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd11u), mean(psd11m)]), max([mean(psd11u), mean(psd11m)])])
-colorbar
-title("Avg Unmodded Song 11 at "+string(thetasong(11))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song11.fig')
-saveas(gcf,'Song11.png')
-
-%SONG 12
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd12m,1),'b')
-hold on
-plot(cfT,mean(psd12u,1),'r')
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 12 :', songtitles{12}))
-[ d, ix ] = min(abs(cfT-thetasong(12))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd12m(:) == 0),topoplot(psd12m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd12u), mean(psd12m)]), max([mean(psd12u), mean(psd12m)])])
-colorbar
-title("Avg Modded Song 12 at "+string(thetasong(12))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd12u(:) == 0),topoplot(psd12u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd12u), mean(psd12m)]), max([mean(psd12u), mean(psd12m)])])
-colorbar
-title("Avg Unmodded Song 12 at "+string(thetasong(12))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song12.fig')
-saveas(gcf,'Song12.png')
-
-%SONG 13
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd13m,1),'b')
-hold on
-plot(cfT,mean(psd13u,1),'r')
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 13 :', songtitles{13}))
-[ d, ix ] = min(abs(cfT-thetasong(13))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd13m(:) == 0),topoplot(psd13m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd13u), mean(psd13m)]), max([mean(psd13u), mean(psd13m)])])
-colorbar
-title("Avg Modded Song 13 at "+string(thetasong(13))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd13u(:) == 0),topoplot(psd13u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd13u), mean(psd13m)]), max([mean(psd13u), mean(psd13m)])])
-colorbar
-title("Avg Unmodded Song 13 at "+string(thetasong(13))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song13.fig')
-saveas(gcf,'Song13.png')
-
-%SONG 14
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd14m,1),'b')
-hold on
-plot(cfT,mean(psd14u,1),'r')
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 14 :', songtitles{14}))
-[ d, ix ] = min(abs(cfT-thetasong(14))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd14m(:) == 0),topoplot(psd14m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd14u), mean(psd14m)]), max([mean(psd14u), mean(psd14m)])])
-colorbar
-title("Avg Modded Song 14 at "+string(thetasong(14))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd14u(:) == 0),topoplot(psd14u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd14u), mean(psd14m)]), max([mean(psd14u), mean(psd14m)])])
-colorbar
-title("Avg Unmodded Song 14 at "+string(thetasong(14))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song14.fig')
-saveas(gcf,'Song14.png')
-
-%SONG 15
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd15m,1),'b')
-hold on
-plot(cfT,mean(psd15u,1),'r')
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 15 :', songtitles{15}))
-[ d, ix ] = min(abs(cfT-thetasong(15))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd15m(:) == 0),topoplot(psd15m(:,ix),EEG.chanlocs,'electrodes','off');clim([min([mean(psd15u), mean(psd15m)]), max([mean(psd15u), mean(psd15m)])]);colorbar;end
-title("Avg Modded Song 15 at "+string(thetasong(15))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd15u(:) == 0),topoplot(psd15u(:,ix),EEG.chanlocs,'electrodes','off');clim([min([mean(psd15u), mean(psd15m)]), max([mean(psd15u), mean(psd15m)])]);colorbar;end
-title("Avg Unmodded Song 15 at "+string(thetasong(15))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song15.fig')
-saveas(gcf,'Song15.png')
-
-%SONG 16
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd16m,1),'b')
-hold on
-plot(cfT,mean(psd16u,1),'r')
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 16 :', songtitles{16}))
-[ d, ix ] = min(abs(cfT-thetasong(16))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd16m(:) == 0),topoplot(psd16m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd16u), mean(psd16m)]), max([mean(psd16u), mean(psd16m)])])
-colorbar
-title("Avg Modded Song 16 at "+string(thetasong(16))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd16u(:) == 0),topoplot(psd16u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd16u), mean(psd16m)]), max([mean(psd16u), mean(psd16m)])])
-colorbar 
-title("Avg Unmodded Song 16 at "+string(thetasong(16))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song16.fig')
-saveas(gcf,'Song16.png')
-
-%SONG 17
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd17m,1),'b')
-hold on
-plot(cfT,mean(psd17u,1),'r')
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 17 :', songtitles{17}))
-[ d, ix ] = min(abs(cfT-thetasong(17))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd17m(:) == 0),topoplot(psd17m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd17u), mean(psd17m)]), max([mean(psd17u), mean(psd17m)])])
-colorbar
-title("Avg Modded Song 17 at "+string(thetasong(17))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd17u(:) == 0),topoplot(psd17u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd17u), mean(psd17m)]), max([mean(psd17u), mean(psd17m)])])
-colorbar
-title("Avg Unmodded Song 17 at "+string(thetasong(17))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song17.fig')
-saveas(gcf,'Song17.png')
-
-%SONG 18
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd18m,1),'b')
-hold on
-plot(cfT,mean(psd18u,1),'r')
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 18 :', songtitles{18}))
-[ d, ix ] = min(abs(cfT-thetasong(18))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd18m(:) == 0),topoplot(psd18m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd18u), mean(psd18m)]), max([mean(psd18u), mean(psd18m)])])
-colorbar
-title("Avg Modded Song 18 at "+string(thetasong(18))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd18u(:) == 0),topoplot(psd18u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd18u), mean(psd18m)]), max([mean(psd18u), mean(psd18m)])])
-colorbar
-title("Avg Unmodded Song 18 at "+string(thetasong(18))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song18.fig')
-saveas(gcf,'Song18.png')
-
-%SONG 19
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd19m,1),'b')
-hold on
-plot(cfT,mean(psd19u,1),'r')
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 19 :', songtitles{19}))
-[ d, ix ] = min(abs(cfT-thetasong(19))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd19m(:) == 0),topoplot(psd19m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd19u), mean(psd19m)]), max([mean(psd19u), mean(psd19m)])])
-colorbar
-title("Avg Modded Song 19 at "+string(thetasong(19))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd19u(:) == 0),topoplot(psd19u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd19u), mean(psd19m)]), max([mean(psd19u), mean(psd19m)])])
-colorbar
-title("Avg Unmodded Song 19 at "+string(thetasong(19))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song19.fig')
-saveas(gcf,'Song19.png')
-
-%song 20
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd20m,1))
-hold on
-plot(cfT,mean(psd20u,1))
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 20 :', songtitles{20}))
-[ d, ix ] = min(abs(cfT-thetasong(20))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd20m(:) == 0),topoplot(psd20m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd20u), mean(psd20m)]), max([mean(psd20u), mean(psd20m)])])
-colorbar
-title("Avg Modded Song 20 at "+string(thetasong(20))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd20u(:) == 0),topoplot(psd20u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd20u), mean(psd20m)]), max([mean(psd20u), mean(psd20m)])])
-colorbar
-title("Avg Unmodded Song 20 at "+string(thetasong(20))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song20.fig')
-saveas(gcf,'Song20.png')
-
-%song 21
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd21m,1))
-hold on
-plot(cfT,mean(psd21u,1))
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 21 :', songtitles{21}))
-[ d, ix ] = min(abs(cfT-thetasong(21))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd21m(:) == 0),topoplot(psd21m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd21u), mean(psd21m)]), max([mean(psd21u), mean(psd21m)])])
-colorbar
-title("Avg Modded Song 21 at "+string(thetasong(21))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd21u(:) == 0),topoplot(psd21u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd21u), mean(psd21m)]), max([mean(psd21u), mean(psd21m)])])
-colorbar
-title("Avg Unmodded Song 21 at "+string(thetasong(21))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song21.fig')
-saveas(gcf,'Song21.png')
-
-%song 22
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd22m,1))
-hold on
-plot(cfT,mean(psd22u,1))
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 22 :', songtitles{22}))
-[ d, ix ] = min(abs(cfT-thetasong(22))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd22m(:) == 0),topoplot(psd22m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd22u), mean(psd22m)]), max([mean(psd22u), mean(psd22m)])])
-colorbar
-title("Avg Modded Song 22 at "+string(thetasong(22))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd22u(:) == 0),topoplot(psd22u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd22u), mean(psd22m)]), max([mean(psd22u), mean(psd22m)])])
-colorbar
-title("Avg Unmodded Song 22 at "+string(thetasong(22))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song22.fig')
-saveas(gcf,'Song22.png')
-
-%song 23
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd23m,1))
-hold on
-plot(cfT,mean(psd23u,1))
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 23 :', songtitles{23}))
-[ d, ix ] = min(abs(cfT-thetasong(23))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd23m(:) == 0),topoplot(psd23m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd23u), mean(psd23m)]), max([mean(psd23u), mean(psd23m)])])
-colorbar
-title("Avg Modded Song 23 at "+string(thetasong(23))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd23u(:) == 0),topoplot(psd23u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd23u), mean(psd23m)]), max([mean(psd23u), mean(psd23m)])])
-colorbar
-title("Avg Unmodded Song 23 at "+string(thetasong(23))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song23.fig')
-saveas(gcf,'Song23.png')
-
-%song 24
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd24m,1))
-hold on
-plot(cfT,mean(psd24u,1))
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 24 :', songtitles{24}))
-[ d, ix ] = min(abs(cfT-thetasong(24))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd24m(:) == 0),topoplot(psd24m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd24u), mean(psd24m)]), max([mean(psd24u), mean(psd24m)])])
-colorbar
-title("Avg Modded Song 24 at "+string(thetasong(24))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd24u(:) == 0),topoplot(psd24u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd24u), mean(psd24m)]), max([mean(psd24u), mean(psd24m)])])
-colorbar
-title("Avg Unmodded Song 24 at "+string(thetasong(24))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song24.fig')
-saveas(gcf,'Song24.png')
-
-%song 25
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd25m,1))
-hold on
-plot(cfT,mean(psd25u,1))
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 25 :', songtitles{25}))
-[ d, ix ] = min(abs(cfT-thetasong(25))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd25m(:) == 0),topoplot(psd25m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd25u), mean(psd25m)]), max([mean(psd25u), mean(psd25m)])])
-colorbar
-title("Avg Modded Song 25 at "+string(thetasong(2))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd25u(:) == 0),topoplot(psd25u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd25u), mean(psd25m)]), max([mean(psd25u), mean(psd25m)])])
-colorbar
-title("Avg Unmodded Song 25 at "+string(thetasong(25))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song25.fig')
-saveas(gcf,'Song25.png')
-
-%song 26
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd26m,1))
-hold on
-plot(cfT,mean(psd26u,1))
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 26 :', songtitles{26}))
-[ d, ix ] = min(abs(cfT-thetasong(26))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd26m(:) == 0),topoplot(psd26m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd26u), mean(psd26m)]), max([mean(psd26u), mean(psd26m)])])
-colorbar
-title("Avg Modded Song 26 at "+string(thetasong(26))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd26u(:) == 0),topoplot(psd26u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd26u), mean(psd26m)]), max([mean(psd26u), mean(psd26m)])])
-colorbar
-title("Avg Unmodded Song 26 at "+string(thetasong(26))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song26.fig')
-saveas(gcf,'Song26.png')
-
-%song 27
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd27m,1))
-hold on
-plot(cfT,mean(psd27u,1))
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 27 :', songtitles{27}))
-[ d, ix ] = min(abs(cfT-thetasong(27))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd27m(:) == 0),topoplot(psd27m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd27u), mean(psd27m)]), max([mean(psd27u), mean(psd27m)])])
-colorbar
-title("Avg Modded Song 27 at "+string(thetasong(27))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd27u(:) == 0),topoplot(psd27u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd27u), mean(psd27m)]), max([mean(psd27u), mean(psd27m)])])
-colorbar
-title("Avg Unmodded Song 27 at "+string(thetasong(27))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song27.fig')
-saveas(gcf,'Song27.png')
-
-%song 28
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd28m,1))
-hold on
-plot(cfT,mean(psd28u,1))
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 28 :', songtitles{28}))
-[ d, ix ] = min(abs(cfT-thetasong(28))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd28m(:) == 0),topoplot(psd28m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd28u), mean(psd28m)]), max([mean(psd28u), mean(psd28m)])])
-colorbar
-title("Avg Modded Song 28 at "+string(thetasong(28))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd28u(:) == 0),topoplot(psd28u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd28u), mean(psd28m)]), max([mean(psd28u), mean(psd28m)])])
-colorbar
-title("Avg Unmodded Song 28 at "+string(thetasong(28))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song28.fig')
-saveas(gcf,'Song28.png')
-
-%song 29
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd29m,1))
-hold on
-plot(cfT,mean(psd29u,1))
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 29 :', songtitles{29}))
-[ d, ix ] = min(abs(cfT-thetasong(29))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd29m(:) == 0),topoplot(psd29m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd29u), mean(psd29m)]), max([mean(psd29u), mean(psd29m)])])
-colorbar
-title("Avg Modded Song 29 at "+string(thetasong(29))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd29u(:) == 0),topoplot(psd29u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd29u), mean(psd29m)]), max([mean(psd29u), mean(psd29m)])])
-colorbar
-title("Avg Unmodded Song 29 at "+string(thetasong(29))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song29.fig')
-saveas(gcf,'Song29.png')
-
-%song 30
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd30m,1))
-hold on
-plot(cfT,mean(psd30u,1))
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 30 :', songtitles{30}))
-[ d, ix ] = min(abs(cfT-thetasong(30))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd30m(:) == 0),topoplot(psd30m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd30u), mean(psd30m)]), max([mean(psd30u), mean(psd30m)])])
-colorbar
-title("Avg Modded Song 30 at "+string(thetasong(30))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd30u(:) == 0),topoplot(psd30u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd30u), mean(psd30m)]), max([mean(psd30u), mean(psd30m)])])
-colorbar
-title("Avg Unmodded Song 30 at "+string(thetasong(30))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song30.fig')
-saveas(gcf,'Song30.png')
-
-%song 31
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd31m,1))
-hold on
-plot(cfT,mean(psd31u,1))
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 31 :', songtitles{31}))
-[ d, ix ] = min(abs(cfT-thetasong(31))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd31m(:) == 0),topoplot(psd31m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd31u), mean(psd31m)]), max([mean(psd31u), mean(psd31m)])])
-colorbar
-title("Avg Modded Song 31 at "+string(thetasong(31))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd31u(:) == 0),topoplot(psd31u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd31u), mean(psd31m)]), max([mean(psd31u), mean(psd31m)])])
-colorbar
-title("Avg Unmodded Song 31 at "+string(thetasong(31))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song31.fig')
-saveas(gcf,'Song31.png')
-
-%song 32
-figure; 
-subplot(2,2,[1,2])
-plot(cfT,mean(psd32m,1))
-hold on
-plot(cfT,mean(psd32u,1))
-legend('Modded','Unmodded');
-xlabel('Hz'),ylabel('PSD');
-title(strcat('Average PSD of Song 32 :', songtitles{32}))
-[ d, ix ] = min(abs(cfT-thetasong(32))); %choose the closest bin to the songs theta Hz value
-subplot(2,2,3)
-if ~all(psd32m(:) == 0),topoplot(psd32m(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd32u), mean(psd32m)]), max([mean(psd32u), mean(psd32m)])])
-colorbar
-title("Avg Modded Song 32 at "+string(thetasong(32))+'Hz (bin '+string(ix)+')');
-subplot(2,2,4)
-if ~all(psd3u(:) == 0),topoplot(psd32u(:,ix),EEG.chanlocs,'electrodes','off');end
-clim([min([mean(psd32u), mean(psd32m)]), max([mean(psd32u), mean(psd32m)])])
-colorbar
-title("Avg Unmodded Song 32 at "+string(thetasong(32))+'Hz (bin '+string(ix)+')');
-saveas(gcf,'Song32.fig')
-saveas(gcf,'Song32.png')
+    figure; 
+    subplot(2,2,[1,2])
+    plot(cfT,mean(psdkm,1),'b')   %*                                              
+    hold on
+    plot(cfT,mean(psdku,1),'r') %*
+    legend('Modded','Unmodded');
+    xlabel('Hz'),ylabel('PSD');
+    title(strcat('Average PSD of Song ',string(k),' : ', songtitles{k}))
+    [ d, ix ] = min(abs(cfT-thetasong(k))); %choose the closest bin to the songs theta Hz value
+    subplot(2,2,3)
+    if ~all(psdkm(:) == 0),topoplot(psdkm(:,ix),EEG.chanlocs,'electrodes','off');end %*
+    clim([min([mean(psdku), mean(psdkm)]), max([mean(psdku), mean(psdkm)])]) %*
+    colorbar
+    title(strcat("Avg Modded Song ",string(k)," at ",string(thetasong(k)),'Hz (bin ',string(ix),')'));
+    subplot(2,2,4)
+    if ~all(psdku(:) == 0),topoplot(psdku(:,ix),EEG.chanlocs,'electrodes','off');end %*
+    clim([min([mean(psdku), mean(psdkm)]), max([mean(psdku), mean(psdkm)])])
+    colorbar
+    title(strcat("Avg Unmodded Song ",string(k)," at ",string(thetasong(k)),'Hz (bin '+string(ix),')'));
+    saveas(gcf,strcat(songtitles{k},'.fig'))
+    saveas(gcf,strcat(songtitles{k},'.png'))
+end
 
 
+%%
+
+% Each song 1 through 32
+% %SONG 1
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd1m,1),'b')
+% 
+% hold on
+% plot(cfT,mean(psd1u,1),'r')
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 1 :', songtitles{1}))
+% [ d, ix ] = min(abs(cfT-thetasong(1))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd1m(:) == 0),topoplot(psd1m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd1u), mean(psd1m)]), max([mean(psd1u), mean(psd1m)])])
+% colorbar
+% title("Avg Modded Song 1 at "+string(thetasong(1))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd1u(:) == 0),topoplot(psd1u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd1u), mean(psd1m)]), max([mean(psd1u), mean(psd1m)])])
+% colorbar
+% title("Avg Unmodded Song 1 at "+string(thetasong(1))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song1.fig')
+% saveas(gcf,'Song1.png')
+% 
+% %song 2
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd2m,1))
+% hold on
+% plot(cfT,mean(psd2u,1))
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 2 :', songtitles{2}))
+% [ d, ix ] = min(abs(cfT-thetasong(2))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd2m(:) == 0),topoplot(psd2m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd2u), mean(psd2m)]), max([mean(psd2u), mean(psd2m)])])
+% colorbar
+% title("Avg Modded Song 2 at "+string(thetasong(2))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd2u(:) == 0),topoplot(psd2u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd2u), mean(psd2m)]), max([mean(psd2u), mean(psd2m)])])
+% colorbar
+% title("Avg Unmodded Song 2 at "+string(thetasong(2))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song2.fig')
+% saveas(gcf,'Song2.png')
+% 
+% %song 3
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd3m,1))
+% hold on
+% plot(cfT,mean(psd3u,1))
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 3 :', songtitles{3}))
+% [ d, ix ] = min(abs(cfT-thetasong(3))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd3m(:) == 0),topoplot(psd3m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd3u), mean(psd3m)]), max([mean(psd3u), mean(psd3m)])])
+% colorbar
+% title("Avg Modded Song 3 at "+string(thetasong(3))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd3u(:) == 0),topoplot(psd3u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd3u), mean(psd3m)]), max([mean(psd3u), mean(psd3m)])])
+% colorbar
+% title("Avg Unmodded Song 3 at "+string(thetasong(3))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song3.fig')
+% saveas(gcf,'Song3.png')
+% 
+% %song 4
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd4m,1))
+% hold on
+% plot(cfT,mean(psd4u,1))
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 4 :', songtitles{4}))
+% [ d, ix ] = min(abs(cfT-thetasong(4))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd4m(:) == 0),topoplot(psd4m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd4u), mean(psd4m)]), max([mean(psd4u), mean(psd4m)])])
+% colorbar
+% title("Avg Modded Song 4 at "+string(thetasong(4))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd4u(:) == 0),topoplot(psd4u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd4u), mean(psd4m)]), max([mean(psd4u), mean(psd4m)])])
+% colorbar
+% title("Avg Unmodded Song 4 at "+string(thetasong(4))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song4.fig')
+% saveas(gcf,'Song4.png')
+% 
+% %
+% %SONG 5
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd5m,1),'b')
+% hold on
+% plot(cfT,mean(psd5u,1),'r')
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 5 :', songtitles{5}))
+% [ d, ix ] = min(abs(cfT-thetasong(5))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd5m(:) == 0),topoplot(psd5m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd5u), mean(psd5m)]), max([mean(psd5u), mean(psd5m)])])
+% colorbar
+% title("Avg Modded Song 5 at "+string(thetasong(5))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd5u(:) == 0),topoplot(psd5u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd5u), mean(psd5m)]), max([mean(psd5u), mean(psd5m)])])
+% colorbar
+% title("Avg Unmodded Song 5 at "+string(thetasong(5))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song5.fig')
+% saveas(gcf,'Song5.png')
+% 
+% %SONG 6
+% % figure; 
+% % subplot(2,2,[1,2])
+% % plot(cfT,mean(psd6m,1),'b')
+% % hold on
+% % plot(cfT,mean(psd6u,1),'r')
+% % legend('Modded','Unmodded');
+% % xlabel('Hz'),ylabel('PSD');
+% % title(strcat('Average PSD of Song 6 :', songtitles{6}))
+% % [ d, ix ] = min(abs(cfT-thetasong(6))); %choose the closest bin to the songs theta Hz value
+% % subplot(2,2,3)
+% % if ~all(psd6m(:) == 0),topoplot(psd6m(:,ix),EEG.chanlocs,'electrodes','off');clim([min([mean(psd6u), mean(psd6m)]), max([mean(psd6u), mean(psd6m)])]);colorbar;end
+% % title("Avg Modded Song 6 at "+string(thetasong(6))+'Hz (bin '+string(ix)+')');
+% % subplot(2,2,4)
+% % if ~all(psd6u(:) == 0),topoplot(psd6u(:,ix),EEG.chanlocs,'electrodes','off');clim([min([mean(psd6u), mean(psd6m)]), max([mean(psd6u), mean(psd6m)])]);colorbar;end
+% % title("Avg Unmodded Song 6 at "+string(thetasong(6))+'Hz (bin '+string(ix)+')');
+% % saveas(gcf,'Song6.fig')
+% % saveas(gcf,'Song6.png')
+% 
+% %SONG 7
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd7m,1),'b')
+% hold on
+% plot(cfT,mean(psd7u,1),'r')
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 7 :', songtitles{7}))
+% [ d, ix ] = min(abs(cfT-thetasong(7))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd7m(:) == 0),topoplot(psd7m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd7u), mean(psd5m)]), max([mean(psd7u), mean(psd7m)])])
+% colorbar
+% title("Avg Modded Song 7 at "+string(thetasong(7))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd7u(:) == 0),topoplot(psd7u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd7u), mean(psd7m)]), max([mean(psd7u), mean(psd7m)])])
+% colorbar
+% title("Avg Unmodded Song 7 at "+string(thetasong(7))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song7.fig')
+% saveas(gcf,'Song7.png')
+% 
+% %SONG 8
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd8m,1),'b')
+% hold on
+% plot(cfT,mean(psd8u,1),'r')
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 8 :', songtitles{8}))
+% [ d, ix ] = min(abs(cfT-thetasong(8))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd8m(:) == 0),topoplot(psd8m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd8u), mean(psd8m)]), max([mean(psd8u), mean(psd8m)])])
+% colorbar
+% title("Avg Modded Song 8 at "+string(thetasong(8))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd8u(:) == 0),topoplot(psd8u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd8u), mean(psd8m)]), max([mean(psd8u), mean(psd8m)])])
+% colorbar
+% title("Avg Unmodded Song 8 at "+string(thetasong(8))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song8.fig')
+% saveas(gcf,'Song8.png')
+% 
+% %SONG 9
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd9m,1),'b')
+% hold on
+% plot(cfT,mean(psd9u,1),'r')
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 9 :', songtitles{9}))
+% [ d, ix ] = min(abs(cfT-thetasong(9))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd9m(:) == 0),topoplot(psd9m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd9u), mean(psd9m)]), max([mean(psd9u), mean(psd9m)])])
+% colorbar
+% title("Avg Modded Song 9 at "+string(thetasong(9))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd9u(:) == 0),topoplot(psd9u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd9u), mean(psd9m)]), max([mean(psd9u), mean(psd9m)])])
+% colorbar
+% title("Avg Unmodded Song 9 at "+string(thetasong(9))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song9.fig')
+% saveas(gcf,'Song9.png')
+% 
+% %SONG 10
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd10m,1),'b')
+% hold on
+% plot(cfT,mean(psd10u,1),'r')
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 10 :', songtitles{10}))
+% [ d, ix ] = min(abs(cfT-thetasong(10))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd10m(:) == 0),topoplot(psd10m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd10u), mean(psd10m)]), max([mean(psd10u), mean(psd10m)])])
+% colorbar
+% title("Avg Modded Song 10 at "+string(thetasong(10))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd10u(:) == 0),topoplot(psd10u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd10u), mean(psd10m)]), max([mean(psd10u), mean(psd10m)])])
+% colorbar
+% title("Avg Unmodded Song 10 at "+string(thetasong(10))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song10.fig')
+% saveas(gcf,'Song10.png')
+% 
+% %SONG 11
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd11m,1),'b')
+% hold on
+% plot(cfT,mean(psd11u,1),'r')
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 11 :', songtitles{11}))
+% [ d, ix ] = min(abs(cfT-thetasong(11))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd11m(:) == 0),topoplot(psd11m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd11u), mean(psd11m)]), max([mean(psd11u), mean(psd11m)])])
+% colorbar
+% title("Avg Modded Song 11 at "+string(thetasong(11))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd11u(:) == 0),topoplot(psd11u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd11u), mean(psd11m)]), max([mean(psd11u), mean(psd11m)])])
+% colorbar
+% title("Avg Unmodded Song 11 at "+string(thetasong(11))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song11.fig')
+% saveas(gcf,'Song11.png')
+% 
+% %SONG 12
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd12m,1),'b')
+% hold on
+% plot(cfT,mean(psd12u,1),'r')
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 12 :', songtitles{12}))
+% [ d, ix ] = min(abs(cfT-thetasong(12))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd12m(:) == 0),topoplot(psd12m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd12u), mean(psd12m)]), max([mean(psd12u), mean(psd12m)])])
+% colorbar
+% title("Avg Modded Song 12 at "+string(thetasong(12))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd12u(:) == 0),topoplot(psd12u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd12u), mean(psd12m)]), max([mean(psd12u), mean(psd12m)])])
+% colorbar
+% title("Avg Unmodded Song 12 at "+string(thetasong(12))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song12.fig')
+% saveas(gcf,'Song12.png')
+% 
+% %SONG 13
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd13m,1),'b')
+% hold on
+% plot(cfT,mean(psd13u,1),'r')
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 13 :', songtitles{13}))
+% [ d, ix ] = min(abs(cfT-thetasong(13))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd13m(:) == 0),topoplot(psd13m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd13u), mean(psd13m)]), max([mean(psd13u), mean(psd13m)])])
+% colorbar
+% title("Avg Modded Song 13 at "+string(thetasong(13))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd13u(:) == 0),topoplot(psd13u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd13u), mean(psd13m)]), max([mean(psd13u), mean(psd13m)])])
+% colorbar
+% title("Avg Unmodded Song 13 at "+string(thetasong(13))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song13.fig')
+% saveas(gcf,'Song13.png')
+% 
+% %SONG 14
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd14m,1),'b')
+% hold on
+% plot(cfT,mean(psd14u,1),'r')
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 14 :', songtitles{14}))
+% [ d, ix ] = min(abs(cfT-thetasong(14))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd14m(:) == 0),topoplot(psd14m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd14u), mean(psd14m)]), max([mean(psd14u), mean(psd14m)])])
+% colorbar
+% title("Avg Modded Song 14 at "+string(thetasong(14))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd14u(:) == 0),topoplot(psd14u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd14u), mean(psd14m)]), max([mean(psd14u), mean(psd14m)])])
+% colorbar
+% title("Avg Unmodded Song 14 at "+string(thetasong(14))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song14.fig')
+% saveas(gcf,'Song14.png')
+% 
+% %SONG 15
+% % figure; 
+% % subplot(2,2,[1,2])
+% % plot(cfT,mean(psd15m,1),'b')
+% % hold on
+% % plot(cfT,mean(psd15u,1),'r')
+% % legend('Modded','Unmodded');
+% % xlabel('Hz'),ylabel('PSD');
+% % title(strcat('Average PSD of Song 15 :', songtitles{15}))
+% % [ d, ix ] = min(abs(cfT-thetasong(15))); %choose the closest bin to the songs theta Hz value
+% % subplot(2,2,3)
+% % if ~all(psd15m(:) == 0),topoplot(psd15m(:,ix),EEG.chanlocs,'electrodes','off');clim([min([mean(psd15u), mean(psd15m)]), max([mean(psd15u), mean(psd15m)])]);colorbar;end
+% % title("Avg Modded Song 15 at "+string(thetasong(15))+'Hz (bin '+string(ix)+')');
+% % subplot(2,2,4)
+% % if ~all(psd15u(:) == 0),topoplot(psd15u(:,ix),EEG.chanlocs,'electrodes','off');clim([min([mean(psd15u), mean(psd15m)]), max([mean(psd15u), mean(psd15m)])]);colorbar;end
+% % title("Avg Unmodded Song 15 at "+string(thetasong(15))+'Hz (bin '+string(ix)+')');
+% % saveas(gcf,'Song15.fig')
+% % saveas(gcf,'Song15.png')
+% 
+% %SONG 16
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd16m,1),'b')
+% hold on
+% plot(cfT,mean(psd16u,1),'r')
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 16 :', songtitles{16}))
+% [ d, ix ] = min(abs(cfT-thetasong(16))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd16m(:) == 0),topoplot(psd16m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd16u), mean(psd16m)]), max([mean(psd16u), mean(psd16m)])])
+% colorbar
+% title("Avg Modded Song 16 at "+string(thetasong(16))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd16u(:) == 0),topoplot(psd16u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd16u), mean(psd16m)]), max([mean(psd16u), mean(psd16m)])])
+% colorbar 
+% title("Avg Unmodded Song 16 at "+string(thetasong(16))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song16.fig')
+% saveas(gcf,'Song16.png')
+% 
+% %SONG 17
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd17m,1),'b')
+% hold on
+% plot(cfT,mean(psd17u,1),'r')
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 17 :', songtitles{17}))
+% [ d, ix ] = min(abs(cfT-thetasong(17))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd17m(:) == 0),topoplot(psd17m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd17u), mean(psd17m)]), max([mean(psd17u), mean(psd17m)])])
+% colorbar
+% title("Avg Modded Song 17 at "+string(thetasong(17))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd17u(:) == 0),topoplot(psd17u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd17u), mean(psd17m)]), max([mean(psd17u), mean(psd17m)])])
+% colorbar
+% title("Avg Unmodded Song 17 at "+string(thetasong(17))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song17.fig')
+% saveas(gcf,'Song17.png')
+% 
+% %SONG 18
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd18m,1),'b')
+% hold on
+% plot(cfT,mean(psd18u,1),'r')
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 18 :', songtitles{18}))
+% [ d, ix ] = min(abs(cfT-thetasong(18))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd18m(:) == 0),topoplot(psd18m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd18u), mean(psd18m)]), max([mean(psd18u), mean(psd18m)])])
+% colorbar
+% title("Avg Modded Song 18 at "+string(thetasong(18))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd18u(:) == 0),topoplot(psd18u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd18u), mean(psd18m)]), max([mean(psd18u), mean(psd18m)])])
+% colorbar
+% title("Avg Unmodded Song 18 at "+string(thetasong(18))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song18.fig')
+% saveas(gcf,'Song18.png')
+% 
+% %SONG 19
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd19m,1),'b')
+% hold on
+% plot(cfT,mean(psd19u,1),'r')
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 19 :', songtitles{19}))
+% [ d, ix ] = min(abs(cfT-thetasong(19))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd19m(:) == 0),topoplot(psd19m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd19u), mean(psd19m)]), max([mean(psd19u), mean(psd19m)])])
+% colorbar
+% title("Avg Modded Song 19 at "+string(thetasong(19))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd19u(:) == 0),topoplot(psd19u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd19u), mean(psd19m)]), max([mean(psd19u), mean(psd19m)])])
+% colorbar
+% title("Avg Unmodded Song 19 at "+string(thetasong(19))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song19.fig')
+% saveas(gcf,'Song19.png')
+% 
+% %song 20
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd20m,1))
+% hold on
+% plot(cfT,mean(psd20u,1))
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 20 :', songtitles{20}))
+% [ d, ix ] = min(abs(cfT-thetasong(20))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd20m(:) == 0),topoplot(psd20m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd20u), mean(psd20m)]), max([mean(psd20u), mean(psd20m)])])
+% colorbar
+% title("Avg Modded Song 20 at "+string(thetasong(20))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd20u(:) == 0),topoplot(psd20u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd20u), mean(psd20m)]), max([mean(psd20u), mean(psd20m)])])
+% colorbar
+% title("Avg Unmodded Song 20 at "+string(thetasong(20))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song20.fig')
+% saveas(gcf,'Song20.png')
+% 
+% %song 21
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd21m,1))
+% hold on
+% plot(cfT,mean(psd21u,1))
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 21 :', songtitles{21}))
+% [ d, ix ] = min(abs(cfT-thetasong(21))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd21m(:) == 0),topoplot(psd21m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd21u), mean(psd21m)]), max([mean(psd21u), mean(psd21m)])])
+% colorbar
+% title("Avg Modded Song 21 at "+string(thetasong(21))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd21u(:) == 0),topoplot(psd21u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd21u), mean(psd21m)]), max([mean(psd21u), mean(psd21m)])])
+% colorbar
+% title("Avg Unmodded Song 21 at "+string(thetasong(21))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song21.fig')
+% saveas(gcf,'Song21.png')
+% 
+% %song 22
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd22m,1))
+% hold on
+% plot(cfT,mean(psd22u,1))
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 22 :', songtitles{22}))
+% [ d, ix ] = min(abs(cfT-thetasong(22))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd22m(:) == 0),topoplot(psd22m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd22u), mean(psd22m)]), max([mean(psd22u), mean(psd22m)])])
+% colorbar
+% title("Avg Modded Song 22 at "+string(thetasong(22))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd22u(:) == 0),topoplot(psd22u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd22u), mean(psd22m)]), max([mean(psd22u), mean(psd22m)])])
+% colorbar
+% title("Avg Unmodded Song 22 at "+string(thetasong(22))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song22.fig')
+% saveas(gcf,'Song22.png')
+% 
+% %song 23
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd23m,1))
+% hold on
+% plot(cfT,mean(psd23u,1))
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 23 :', songtitles{23}))
+% [ d, ix ] = min(abs(cfT-thetasong(23))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd23m(:) == 0),topoplot(psd23m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd23u), mean(psd23m)]), max([mean(psd23u), mean(psd23m)])])
+% colorbar
+% title("Avg Modded Song 23 at "+string(thetasong(23))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd23u(:) == 0),topoplot(psd23u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd23u), mean(psd23m)]), max([mean(psd23u), mean(psd23m)])])
+% colorbar
+% title("Avg Unmodded Song 23 at "+string(thetasong(23))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song23.fig')
+% saveas(gcf,'Song23.png')
+% 
+% %song 24
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd24m,1))
+% hold on
+% plot(cfT,mean(psd24u,1))
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 24 :', songtitles{24}))
+% [ d, ix ] = min(abs(cfT-thetasong(24))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd24m(:) == 0),topoplot(psd24m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd24u), mean(psd24m)]), max([mean(psd24u), mean(psd24m)])])
+% colorbar
+% title("Avg Modded Song 24 at "+string(thetasong(24))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd24u(:) == 0),topoplot(psd24u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd24u), mean(psd24m)]), max([mean(psd24u), mean(psd24m)])])
+% colorbar
+% title("Avg Unmodded Song 24 at "+string(thetasong(24))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song24.fig')
+% saveas(gcf,'Song24.png')
+% 
+% %song 25
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd25m,1))
+% hold on
+% plot(cfT,mean(psd25u,1))
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 25 :', songtitles{25}))
+% [ d, ix ] = min(abs(cfT-thetasong(25))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd25m(:) == 0),topoplot(psd25m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd25u), mean(psd25m)]), max([mean(psd25u), mean(psd25m)])])
+% colorbar
+% title("Avg Modded Song 25 at "+string(thetasong(2))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd25u(:) == 0),topoplot(psd25u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd25u), mean(psd25m)]), max([mean(psd25u), mean(psd25m)])])
+% colorbar
+% title("Avg Unmodded Song 25 at "+string(thetasong(25))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song25.fig')
+% saveas(gcf,'Song25.png')
+% 
+% %song 26
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd26m,1))
+% hold on
+% plot(cfT,mean(psd26u,1))
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 26 :', songtitles{26}))
+% [ d, ix ] = min(abs(cfT-thetasong(26))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd26m(:) == 0),topoplot(psd26m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd26u), mean(psd26m)]), max([mean(psd26u), mean(psd26m)])])
+% colorbar
+% title("Avg Modded Song 26 at "+string(thetasong(26))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd26u(:) == 0),topoplot(psd26u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd26u), mean(psd26m)]), max([mean(psd26u), mean(psd26m)])])
+% colorbar
+% title("Avg Unmodded Song 26 at "+string(thetasong(26))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song26.fig')
+% saveas(gcf,'Song26.png')
+% 
+% %song 27
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd27m,1))
+% hold on
+% plot(cfT,mean(psd27u,1))
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 27 :', songtitles{27}))
+% [ d, ix ] = min(abs(cfT-thetasong(27))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd27m(:) == 0),topoplot(psd27m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd27u), mean(psd27m)]), max([mean(psd27u), mean(psd27m)])])
+% colorbar
+% title("Avg Modded Song 27 at "+string(thetasong(27))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd27u(:) == 0),topoplot(psd27u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd27u), mean(psd27m)]), max([mean(psd27u), mean(psd27m)])])
+% colorbar
+% title("Avg Unmodded Song 27 at "+string(thetasong(27))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song27.fig')
+% saveas(gcf,'Song27.png')
+% 
+% %song 28
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd28m,1))
+% hold on
+% plot(cfT,mean(psd28u,1))
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 28 :', songtitles{28}))
+% [ d, ix ] = min(abs(cfT-thetasong(28))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd28m(:) == 0),topoplot(psd28m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd28u), mean(psd28m)]), max([mean(psd28u), mean(psd28m)])])
+% colorbar
+% title("Avg Modded Song 28 at "+string(thetasong(28))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd28u(:) == 0),topoplot(psd28u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd28u), mean(psd28m)]), max([mean(psd28u), mean(psd28m)])])
+% colorbar
+% title("Avg Unmodded Song 28 at "+string(thetasong(28))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song28.fig')
+% saveas(gcf,'Song28.png')
+% 
+% %song 29
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd29m,1))
+% hold on
+% plot(cfT,mean(psd29u,1))
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 29 :', songtitles{29}))
+% [ d, ix ] = min(abs(cfT-thetasong(29))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd29m(:) == 0),topoplot(psd29m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd29u), mean(psd29m)]), max([mean(psd29u), mean(psd29m)])])
+% colorbar
+% title("Avg Modded Song 29 at "+string(thetasong(29))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd29u(:) == 0),topoplot(psd29u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd29u), mean(psd29m)]), max([mean(psd29u), mean(psd29m)])])
+% colorbar
+% title("Avg Unmodded Song 29 at "+string(thetasong(29))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song29.fig')
+% saveas(gcf,'Song29.png')
+% 
+% %song 30
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd30m,1))
+% hold on
+% plot(cfT,mean(psd30u,1))
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 30 :', songtitles{30}))
+% [ d, ix ] = min(abs(cfT-thetasong(30))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd30m(:) == 0),topoplot(psd30m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd30u), mean(psd30m)]), max([mean(psd30u), mean(psd30m)])])
+% colorbar
+% title("Avg Modded Song 30 at "+string(thetasong(30))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd30u(:) == 0),topoplot(psd30u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd30u), mean(psd30m)]), max([mean(psd30u), mean(psd30m)])])
+% colorbar
+% title("Avg Unmodded Song 30 at "+string(thetasong(30))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song30.fig')
+% saveas(gcf,'Song30.png')
+% 
+% %song 31
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd31m,1))
+% hold on
+% plot(cfT,mean(psd31u,1))
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 31 :', songtitles{31}))
+% [ d, ix ] = min(abs(cfT-thetasong(31))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd31m(:) == 0),topoplot(psd31m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd31u), mean(psd31m)]), max([mean(psd31u), mean(psd31m)])])
+% colorbar
+% title("Avg Modded Song 31 at "+string(thetasong(31))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd31u(:) == 0),topoplot(psd31u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd31u), mean(psd31m)]), max([mean(psd31u), mean(psd31m)])])
+% colorbar
+% title("Avg Unmodded Song 31 at "+string(thetasong(31))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song31.fig')
+% saveas(gcf,'Song31.png')
+% 
+% %song 32
+% figure; 
+% subplot(2,2,[1,2])
+% plot(cfT,mean(psd32m,1))
+% hold on
+% plot(cfT,mean(psd32u,1))
+% legend('Modded','Unmodded');
+% xlabel('Hz'),ylabel('PSD');
+% title(strcat('Average PSD of Song 32 :', songtitles{32}))
+% [ d, ix ] = min(abs(cfT-thetasong(32))); %choose the closest bin to the songs theta Hz value
+% subplot(2,2,3)
+% if ~all(psd32m(:) == 0),topoplot(psd32m(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd32u), mean(psd32m)]), max([mean(psd32u), mean(psd32m)])])
+% colorbar
+% title("Avg Modded Song 32 at "+string(thetasong(32))+'Hz (bin '+string(ix)+')');
+% subplot(2,2,4)
+% if ~all(psd3u(:) == 0),topoplot(psd32u(:,ix),EEG.chanlocs,'electrodes','off');end
+% clim([min([mean(psd32u), mean(psd32m)]), max([mean(psd32u), mean(psd32m)])])
+% colorbar
+% title("Avg Unmodded Song 32 at "+string(thetasong(32))+'Hz (bin '+string(ix)+')');
+% saveas(gcf,'Song32.fig')
+% saveas(gcf,'Song32.png')
+% 
+% %/
 
 
