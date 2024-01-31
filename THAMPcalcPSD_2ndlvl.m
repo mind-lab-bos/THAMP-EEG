@@ -96,26 +96,38 @@ counter32u = 0; counter32m = 0;
 
 % there are 32 total songs, 30 of those were used
 % loop through each song
-for j = 1:32
+% and then for each song loop through each participant
+% and then for each participant loop through their 12 songs
+% 3 nested for loops
+for j = 1:32 
     for i = 1:length(ID_list)
-        ID = ID_list{i};
-        path = '/Users/Kob/Documents/MINDLab/eeg stuff/thamp_eeg-data/';
+        ID = ID_list{i}; % current participant in loop
+        path = '/Users/Kob/Documents/MINDLab/eeg stuff/thamp_eeg-data/'; %change path for other machines
         fullpath = [path ID '/'];
         savepath = [fullpath 'analysis/'];
-        for k = 1:12
-        psdm = [];
-        psdu = [];
-        if strcmp(modorder{i}, 'MOD') && (k == 1 || k == 2 || k == 3 || k == 7 || k == 8 || k == 9)
-            modded = true;
-        else, modded = false;
-        end
-        if strcmp(modorder{i}, 'UNMOD') && (k == 1 || k == 2 || k == 3 || k == 7 || k == 8 || k == 9)
-            modded = false;
-        else, modded = true;
-        end
+        % the files are found in /Users/Kob/Documents/MINDLab/eeg
+        % stuff/thamp_eeg-data/(id)/analysis on jakobs machine, change this
+        for k = 1:12 
+            psdm = [];
+            psdu = [];
+            %checking to see if modded or unmodded
+            if strcmp(modorder{i}, 'MOD') && (k == 1 || k == 2 || k == 3 || k == 7 || k == 8 || k == 9)
+                modded = true;
+            else, modded = false;
+            end
+            if strcmp(modorder{i}, 'UNMOD') && (k == 1 || k == 2 || k == 3 || k == 7 || k == 8 || k == 9)
+                modded = false;
+            else, modded = true;
+            end
+            % j is the current song (1-32), i is the current participant,
+            % and k is the current song from that participant (1-12)
+            % the two if statements check to see if this current
+            % participant listened to the song and if it was modded or
+            % unmodded
             if songorder(i,k) == j && modded
+                %if the participant listed to that song then add that song
+                %to temp variable psdm
                 psdm = load(fullfile(savepath,strcat(ID,'_EEGPSD',string(k),'.mat')));
-                
                 % add loaded variable to psdjm
                 %eval([strcat('psd',string(j),'m')]) = eval([strcat('psd',string(j),'m')]) + psdm;
                 
@@ -137,6 +149,8 @@ for j = 1:32
                 %is -infs and replaces that row with the row above.
                 if all(psdm(end, :) == -inf),psdm(end, :) = psdm(end - 1, :);end
 
+                % then add the temp variable psdm to the psd variable for
+                % each song
                 if j == 1, psd1m = psd1m + psdm; counter1m = counter1m + 1;psd1m(62,1), end
                 if j == 2, psd2m = psd2m + psdm; counter2m = counter2m + 1; end
                 if j == 3, psd3m = psd3m + psdm; counter3m = counter3m + 1; end
@@ -171,6 +185,9 @@ for j = 1:32
                 if j == 32, psd32m = psd32m + psdm; counter32m = counter32m + 1; end
 
             end
+
+            % this whole if block is the same as above but for unmodded
+            % songs
             if songorder(i,k) == j && ~modded
                  %psdu = load(fullfile(savepath,strcat(ID,'_EEGPSD',string(k),'.mat')));
                  psdu = load(fullfile(savepath,strcat(ID,'_EEGPSD',string(k),'.mat')));
@@ -235,6 +252,9 @@ for j = 1:32
     end
 end
 
+% check to see if any of the song versions were never listened to, if they
+% were listened to, then calculate the average by dividing the summed up
+% psds for each song and dividing by the counter
 if counter1m ~= 0, psd1m = psd1m/counter1m; end
 if counter1u ~= 0, psd1u = psd1u/counter1u; end
 if counter2m ~= 0, psd2m = psd2m/counter2m; end
@@ -311,9 +331,10 @@ noctT = log2(hfT)-log2(lfT);               % number of octaves
 NT = noctT*nperT+1;                        % Total number of bins
 cfT = logspace(log10(lfT),log10(hfT),NT);  % Log spaced bin center frequencies
 
+% relative theta freq values for each of the 32 songs in order
 thetasong = [5.266666667,4.533333333,6.2,5.2,7.266666667,8.2,4.8,5.8,4.866666667,5.333333333,5.066666667,5.333333333,6.466666667,5.266666667,7.733333333,8,7.6,4.666666667,8.733333333,4.933333333,7.2,6.4,8,6.333333333,4.866666667,5.6,8.2,7.266666667,6.933333333,6.133333333,4.533333333,5.133333333];
 
-songtitles = {'Hello'
+songtitles = {'Hello'  %titles of all the songs
 'Someone Like You'
 'Girl on Fire'
 'Complicated'
@@ -349,12 +370,16 @@ songtitles = {'Hello'
 %%
 %plotting
 
+%opens eeglab and opens one of the participants epoched file. this is not
+%for plotting just so that the channel locations are loaded in the EEG
+%varible
 [ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
 EEG = pop_loadset('filename',[ID '_filt_reref_resamp_rej_interp_prunedICA_epochs.set'],'filepath',fullpath);
 [ALLEEG, EEG, CURRENTSET] = eeg_store( ALLEEG, EEG, 0 );
 
 % song plot loop
 for k = 1:length(songtitles)
+    % if current song matches then load the psd into a temp variable
     if k == 1, psdkm = psd1m; psdku = psd1u; end
     if k == 2, psdkm = psd2m; psdku = psd2u; end
     if k == 3, psdkm = psd3m; psdku = psd3u; end
@@ -389,32 +414,32 @@ for k = 1:length(songtitles)
     if k == 32, psdkm = psd32m; psdku = psd32u; end
 
     figure; 
-    subplot(2,2,[1,2])
-    plot(cfT,mean(psdkm,1),'b')   %*                                              
+    subplot(2,2,[1,2])           %plot all plots on one figure
+    plot(cfT,mean(psdkm,1),'b')   % plot the modded psd                                              
     hold on
-    plot(cfT,mean(psdku,1),'r') %*
+    plot(cfT,mean(psdku,1),'r')    %plot the unmodded psd
     legend('Modded','Unmodded');
     xlabel('Hz'),ylabel('PSD');
     title(strcat('Average PSD of Song ',string(k),' : ', songtitles{k}))
     [ d, ix ] = min(abs(cfT-thetasong(k))); %choose the closest bin to the songs theta Hz value
     subplot(2,2,3)
-    if ~all(psdkm(:) == 0),topoplot(psdkm(:,ix),EEG.chanlocs,'electrodes','off');end %*
+    if ~all(psdkm(:) == 0),topoplot(psdkm(:,ix),EEG.chanlocs,'electrodes','off');end %plot the topos for modded if not empty
     clim([min([mean(psdku), mean(psdkm)]), max([mean(psdku), mean(psdkm)])]) %*
     colorbar
     title(strcat("Avg Modded Song ",string(k)," at ",string(thetasong(k)),'Hz (bin ',string(ix),')'));
     subplot(2,2,4)
-    if ~all(psdku(:) == 0),topoplot(psdku(:,ix),EEG.chanlocs,'electrodes','off');end %*
+    if ~all(psdku(:) == 0),topoplot(psdku(:,ix),EEG.chanlocs,'electrodes','off');end %plot the topos for unmodded if not empty
     clim([min([mean(psdku), mean(psdkm)]), max([mean(psdku), mean(psdkm)])])
     colorbar
     title(strcat("Avg Unmodded Song ",string(k)," at ",string(thetasong(k)),'Hz (bin '+string(ix),')'));
-    saveas(gcf,strcat(songtitles{k},'.fig'))
-    saveas(gcf,strcat(songtitles{k},'.png'))
+    saveas(gcf,strcat(songtitles{k},'.fig')) %save figures as matlab fig
+    saveas(gcf,strcat(songtitles{k},'.png')) %save figure as png
 end
 
 
 %%
 
-% Each song 1 through 32
+% no loop Each song 1 through 32
 % %SONG 1
 % figure; 
 % subplot(2,2,[1,2])
