@@ -117,7 +117,8 @@ for j = 1:32
             end
             if strcmp(modorder{i}, 'UNMOD') && (k == 1 || k == 2 || k == 3 || k == 7 || k == 8 || k == 9)
                 modded = false;
-            else, modded = true;
+            elseif strcmp(modorder{i}, 'UNMOD') && ~(k == 1 || k == 2 || k == 3 || k == 7 || k == 8 || k == 9)
+                modded = true;
             end
             % j is the current song (1-32), i is the current participant,
             % and k is the current song from that participant (1-12)
@@ -320,6 +321,7 @@ if counter31u ~= 0, psd31u = psd31u/counter31u; end
 if counter32m ~= 0, psd32m = psd32m/counter32m; end
 if counter32u ~= 0, psd32u = psd32u/counter32u; end
 
+%%
 % Constants
 extendSecs = 0;                         % Pre- and post-window in secs
 lfT   =  1;                              % lowest frequency bin
@@ -415,9 +417,9 @@ for k = 1:length(songtitles)
 
     figure; 
     subplot(2,2,[1,2])           %plot all plots on one figure
-    plot(cfT,mean(psdkm,1),'b')   % plot the modded psd                                              
+    semilogx(cfT,mean(psdkm,1),'b')   % plot the modded psd                                              
     hold on
-    plot(cfT,mean(psdku,1),'r')    %plot the unmodded psd
+    semilogx(cfT,mean(psdku,1),'r')    %plot the unmodded psd
     legend('Modded','Unmodded');
     xlabel('Hz'),ylabel('PSD');
     title(strcat('Average PSD of Song ',string(k),' : ', songtitles{k}))
@@ -432,7 +434,10 @@ for k = 1:length(songtitles)
     clim([min([mean(psdku), mean(psdkm)]), max([mean(psdku), mean(psdkm)])])
     colorbar
     title(strcat("Avg Unmodded Song ",string(k)," at ",string(thetasong(k)),'Hz (bin '+string(ix),')'));
+   
+    set(gcf, 'PaperPositionMode', 'auto');
     saveas(gcf,strcat(songtitles{k},'.fig')) %save figures as matlab fig
+    set(gcf, 'PaperPositionMode', 'auto');
     saveas(gcf,strcat(songtitles{k},'.png')) %save figure as png
 end
 
