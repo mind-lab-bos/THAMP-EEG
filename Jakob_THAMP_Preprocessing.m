@@ -16,11 +16,12 @@ clc
 % EDIT the path, ID, and ID_l variables for each the current participant
 % and file location
 %THAMP path
-path = '/Users/Kob/Documents/MINDLab/eeg stuff/thamp_eeg-data/';
+path = ['/Users/Kob/Documents/MINDLab/eeg stuff/' ...
+    'thamp_eeg-data/'];
 disp(['Current path is set to: ',path]);
 %ID = input('Input the Participant ID (YYMMDDFLLL#): ','s');
-ID = '231213DROD';
-ID_l = 'drod';
+ID = '240126ISHI';
+ID_l = 'ishi';
 
 vhdr = [ID '.vhdr'];
 fullpath = [path ID '/']
@@ -30,10 +31,17 @@ fullpath = [path ID '/']
 %   OPEN the .vhdr file manually in eeglab first, check the frames per
 %   epoch number and then manually enter it into the line below in the brackets, the the
 %   script will run correctly.
-EEG = pop_loadbv(fullpath,vhdr,[1 5151250],[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64]);
+EEG = pop_loadbv(fullpath,vhdr,[1 4677250],[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64]);
 [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,'setname',ID,'gui','off'); 
 EEG = eeg_checkset( EEG );
 EEG = pop_saveset( EEG, 'filename',[ID '.set'],'filepath',fullpath);
+
+%optional merging code
+% EEG1 = pop_loadbv('/Users/Kob/Documents/MINDLab/eeg stuff/thamp_eeg-data/240124LYUA/', '240124LYUA.vhdr', [1 2804500], [1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64]);
+% %[ALLEEG EEG1 CURRENTSET] = pop_newset(ALLEEG, EEG1, 1,'setname','240124LYUA1','gui','off'); 
+% EEG2 = pop_loadbv('/Users/Kob/Documents/MINDLab/eeg stuff/thamp_eeg-data/240124LYUA/', '240124LYUA2.vhdr', [1 1962000], [1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64]);
+% %[ALLEEG EEG2 CURRENTSET] = pop_newset(ALLEEG, EEG2, 2,'setname','240124LYUA2','gui','off'); 
+% EEG = pop_mergeset(EEG1,EEG2, 0);
 
 
 % runs the script below to ensure the channels are correctly labeled so
@@ -118,8 +126,8 @@ EEG = eeg_checkset( EEG );
 %%
 
 %reject automatic
-%EEG = pop_clean_rawdata(EEG, 'FlatlineCriterion',5,'ChannelCriterion',0.8,'LineNoiseCriterion',4,'Highpass','off','BurstCriterion','off','WindowCriterion','off','BurstRejection','off','Distance','Euclidian','WindowCriterionTolerances',[-Inf 7] );
-%EEG = pop_clean_rawdata(EEG, 'FlatlineCriterion',5,'ChannelCriterion',0.8,'LineNoiseCriterion',4,'Highpass','off','BurstCriterion','off','WindowCriterion','off','BurstRejection','off','Distance','Euclidian');
+EEG = pop_clean_rawdata(EEG, 'FlatlineCriterion',5,'ChannelCriterion',0.8,'LineNoiseCriterion',4,'Highpass','off','BurstCriterion','off','WindowCriterion','off','BurstRejection','off','Distance','Euclidian','WindowCriterionTolerances',[-Inf 7] );
+%%EEG = pop_clean_rawdata(EEG, 'FlatlineCriterion',5,'ChannelCriterion',0.8,'LineNoiseCriterion',4,'Highpass','off','BurstCriterion','off','WindowCriterion','off','BurstRejection','off','Distance','Euclidian');
 
 %channel rejection Manual
 pop_eegplot( EEG, 1, 1, 1);
@@ -177,7 +185,7 @@ figure; topoplot([],EEG.chanlocs, 'style', 'blanEEk',  'electrodes', 'labelpoint
 EEG = eeg_checkset( EEG );
 
 
-%%
+
 % epoching
 %EEG = pop_epoch( EEG, {  'S101'  'S102'  'S103'  'S114'  'S115'  'S116'  'S201'  'S202'  'S203'  'S214'  'S215'  'S216'  }, [0         60.8], 'newname', '231107XHE_filt_reref_resamp_rej_interp_prunedICA_epochs', 'epochinfo', 'yes');
 
@@ -190,8 +198,18 @@ EEG = eeg_checkset( EEG );
 % EEG = pop_loadset('filename',[ID '_filt_reref_resamp_rej_interp_prunedICA.set'],'filepath',fullpath);
 % [ALLEEG, EEG, CURRENTSET] = eeg_store( ALLEEG, EEG, 0 );
 
+
+%EEG = pop_editeventfield( EEG, 'latency',['/Users/Kob/Documents/MINDLab/eeg stuff/thamp_eeg-data/',ID,'/',ID_l,'_time.txt']);
+
 %EPOCHS based on the song start triggers and saves
+%EEG12 = pop_epoch(EEG, {  'S106' }, [0         40], 'newname', '231107XHE_filt_reref_resamp_rej_interp_prunedICA_epochs', 'epochinfo', 'yes');
 EEG = pop_epoch( EEG, {  'S101'  'S102'  'S103' 'S104' 'S105' 'S106' 'S111' 'S112' 'S113' 'S114'  'S115'  'S116'  'S201'  'S202'  'S203' 'S204' 'S205' 'S206' 'S211' 'S212' 'S213'  'S214'  'S215'  'S216'  }, [0         60.8], 'newname', '231107XHE_filt_reref_resamp_rej_interp_prunedICA_epochs', 'epochinfo', 'yes');
+
+%trying to figure out a way to include the 12th epoch if it gets cut off
+% EEG.data = cat(12, EEG.data, EEG12.data);
+% EEG.epoch = [EEG.epoch, EEG12.epoch];
+% EEG.trials = size(EEG.data, 12);
+
 [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 7,'setname',[ID '_filt_reref_resamp_rej_interp_prunedICA_epochs'],'savenew',[fullpath ID '_filt_reref_resamp_rej_interp_prunedICA_epochs.set'],'gui','off'); 
 EEG = eeg_checkset( EEG );
 
