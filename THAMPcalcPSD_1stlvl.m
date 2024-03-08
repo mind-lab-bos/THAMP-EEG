@@ -10,15 +10,18 @@
 
 
 %%
+clear all
+clc 
+
 %SINGLE PARTICIPANT PROCESSING
 %EDIT THESE EACH TIME, check the runlog for song order and taskorder and
 %mod order
-ID = '231213DROD';
-ID_l = 'drod';
+ID = '240117LAYR';
+ID_l = 'layr';
 id = ID;
-songorder1 = 9;
-songorder2 = 3;
-taskorder = 1; %2 for 2back or 1 for sart depending on which is first in the runlog
+songorder1 = 1;
+songorder2 = 5;
+taskorder = 2; %2 for 2back or 1 for sart depending on which is first in the runlog
 modorder = 1; %1 for mod or 2 for unmod depending on which is first in the runlog
 
 % also edit the appropriate file path to where the epoched/processed eeg
@@ -103,7 +106,7 @@ EEG8 = pop_select(EEG, 'trial', 8);
 EEG9 = pop_select(EEG, 'trial', 9);
 EEG10 = pop_select(EEG, 'trial', 10);
 EEG11 = pop_select(EEG, 'trial', 11);
-EEG12 = pop_select(EEG, 'trial', 12);
+%EEG12 = pop_select(EEG, 'trial', 12);
 
 % alternative way of grouping the epochs
 % EEGa = pop_select(EEG, 'trial', [1:3]);
@@ -142,7 +145,7 @@ cfT = logspace(log10(lfT),log10(hfT),NT);  % Log spaced bin center frequencies
 [EEGPSD9, cfT] = calcPSD(EEG9, lfT, hfT, windowT, overlapT); % write PSDs
 [EEGPSD10, cfT] = calcPSD(EEG10, lfT, hfT, windowT, overlapT); % write PSDs
 [EEGPSD11, cfT] = calcPSD(EEG11, lfT, hfT, windowT, overlapT); % write PSDs
-[EEGPSD12, cfT] = calcPSD(EEG12, lfT, hfT, windowT, overlapT); % write PSDs
+%[EEGPSD12, cfT] = calcPSD(EEG12, lfT, hfT, windowT, overlapT); % write PSDs
 
 %saves each psd as a different file
 save(fullfile(savepath,strcat(ID,'_EEGPSD1.mat')),'EEGPSD1')
@@ -156,7 +159,7 @@ save(fullfile(savepath,strcat(ID,'_EEGPSD8.mat')),'EEGPSD8')
 save(fullfile(savepath,strcat(ID,'_EEGPSD9.mat')),'EEGPSD9')
 save(fullfile(savepath,strcat(ID,'_EEGPSD10.mat')),'EEGPSD10')
 save(fullfile(savepath,strcat(ID,'_EEGPSD11.mat')),'EEGPSD11')
-save(fullfile(savepath,strcat(ID,'_EEGPSD12.mat')),'EEGPSD12')
+%save(fullfile(savepath,strcat(ID,'_EEGPSD12.mat')),'EEGPSD12')
 
 
 
