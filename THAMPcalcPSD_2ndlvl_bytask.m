@@ -87,6 +87,8 @@ songorder=[18	14	8	24	23	21	29	11	31	32	12	28;
 26	22	27	10	3	25  1	7	20	30	5	16;
 18	14	8	24	23	21  29	11	31	32	12	28];
 
+thetasong = [5.266666667,4.533333333,6.2,5.2,7.266666667,8.2,4.8,5.8,4.866666667,5.333333333,5.066666667,5.333333333,6.466666667,5.266666667,7.733333333,8,7.6,4.666666667,8.733333333,4.933333333,7.2,6.4,8,6.333333333,4.866666667,5.6,8.2,7.266666667,6.933333333,6.133333333,4.533333333,5.133333333];
+
 %CONSTANTS
 extendSecs = 0;                         % Pre- and post-window in secs
 lfT   =  1;                              % lowest frequency bin
@@ -512,6 +514,9 @@ for k = 1:length(songtitles)
     semilogx(cfT,mean(psdkm,1),'b')   % plot the modded psd                                              
     hold on
     semilogx(cfT,mean(psdku,1),'r')    %plot the unmodded psd
+    hold on
+    xline(thetasong(k),'--')%plot the vertical dotted line at the freq bin for this song
+    
     legend('Modded','Unmodded');
     xlabel('Hz'),ylabel('PSD');
     title(strcat('SART Average PSD of Song ',string(k),' : ', songtitles{k}))
@@ -913,6 +918,8 @@ for k = 1:length(songtitles)
     semilogx(cfT,mean(psdkm,1),'b')   % plot the modded psd                                              
     hold on
     semilogx(cfT,mean(psdku,1),'r')    %plot the unmodded psd
+    hold on
+    xline(thetasong(k),'--');%plot the vertical dotted line at the freq bin for this song%plot the vertical dotted line at the freq bin for this song
     legend('Modded','Unmodded');
     xlabel('Hz'),ylabel('PSD');
     title(strcat('NBACK Average PSD of Song ',string(k),' : ', songtitles{k}))
