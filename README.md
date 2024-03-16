@@ -2,8 +2,7 @@
 Instructions for recruiting/running participants can be found in the THAMP sub-page of the lab wiki. This repo contains instructions and code involved in the preprocessing and analysis of the data.
 
 
-EEG
-Pre-processing
+##Pre-processing
 This is a guide for preprocessing using the script: Jakob_THAMP_Preprocessing.m. It is also very simple to do without the script, just click through the eeglab gui for each step.
 
 Move the eeg files from the recording machine to discovery. The files should be stored in /work/mindlab/Projects/THAMP/EEG Data/raw
