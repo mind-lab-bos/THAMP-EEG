@@ -52,17 +52,23 @@ Arun's preprocessing video tutorials are on the MINDLab dropbox
 
 ## Requirements and Dependencies:
 
+</summary>
+
+
 * MATLAB -- analyses run on version 2024a
 * RStudio
 * MIRtoolbox (includes Auditory Toolbox)
 * EEGlab
 
-</summary>
+
 </details>
 
 <details><summary>
 
 ## Instructions for running examples:
+
+</summary>
+
 
 1. Make sure toolboxes are installed (see above).
 2. Run `THAMP_PLV.m` section by section in MATLAB. 
@@ -72,6 +78,4 @@ Arun's preprocessing video tutorials are on the MINDLab dropbox
 	* You may run into packages that need to be installed through R Studio. Use the command: `install.packages("{package_name}")`
 	* Reproduce plots that break down mod-PLV by ASRS and eBMRQ scores
 
-
-</summary>
 </details>
