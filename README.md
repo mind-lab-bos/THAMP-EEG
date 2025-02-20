@@ -3,12 +3,16 @@
 Scripts for preprocessing and analysis of EEG Data for the THAMP project. More project-general information can be found on the [MIND Lab WIKI](https://github.com/mind-lab-bos/labwiki/wiki). 
 
 Arun's preprocessing video tutorials are on the MINDLab dropbox
+
 <details><summary>
 
 ## File Structure:
 
 </summary>
+
+
 - README.md
+
 - 'THAMP Overview Document.pdf' -> original project procedure, guidelines, pipelines and data processing.
 - **preprocessing**:
 	1. THAMP_preprocess_updated.m
