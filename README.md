@@ -4,7 +4,7 @@ Scripts for preprocessing and analysis of EEG Data for the THAMP project. More p
 
 Arun's preprocessing video tutorials are on the MINDLab dropbox
 
-## Files:
+## File Structure:
 - README.md
 - 'THAMP Overview Document.pdf' -> original project procedure, guidelines, pipelines and data processing.
 - **preprocessing**:
@@ -18,6 +18,18 @@ Arun's preprocessing video tutorials are on the MINDLab dropbox
 	- **PLV_R**:
 		1. THAMP_R_PLV.m
 		2. THAMP_R_EEG.R
+- **example_EEG_data**: fully preprocessed data for 10 participants
+	- `subID`
+		- song_order.csv: 
+		-	`finalEEGs`
+			- EEG\[1-12\].set
+			- EEG\[1-12\].fdt
+
+- **mat_files**:
+
+- **metadata**:
+	1. THAMP_eeg_scored_qualtrics.csv
+	2. qualtrics.csv
 - **old_scripts**:
 	1. Jakob_THAMP_Preprocessing.m
 	2. chanlabels64.m
@@ -25,10 +37,3 @@ Arun's preprocessing video tutorials are on the MINDLab dropbox
 	4. THAMPcalcPSD_1stlvl.m
 	5. THAMPcalcPSD_2ndlvl.m
 	6. THAMPcalcPSD_2ndlvl_bytask.m
-- **example_data**:
-
-- **mat_files**:
-
-- **metadata**:
-	1. THAMP_eeg_scored_qualtrics.csv
-	2. qualtrics.csv
