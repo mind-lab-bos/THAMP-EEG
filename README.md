@@ -5,6 +5,23 @@ Scripts for preprocessing and analysis of EEG Data for the THAMP project. More p
 Arun's preprocessing video tutorials are on the MINDLab dropbox
 
 ## Files:
+├── README.md
+├── THAMP Overview Document.pdf
+├── analysis
+│   └── THAMP_PLV_analyses.m
+├── example_data
+├── old_scripts
+│   ├── Jakob_THAMP_Preprocessing.m
+│   ├── THAMPcalcPSD_1stlvl.m
+│   ├── THAMPcalcPSD_2ndlvl.m
+│   ├── THAMPcalcPSD_2ndlvl_bytask.m
+│   ├── calcPSD.m
+│   └── chanlabels64.m
+└── preprocessing
+    ├── THAMP_preprocess_updated.m
+    └── THAMP_prune_trigs.m
+
+
 ---**preprocessing**:
 	1. THAMP_preprocess_updated.m
 	2. THAMP_prune_trigs.m
