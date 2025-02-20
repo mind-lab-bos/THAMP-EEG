@@ -48,8 +48,28 @@ Arun's preprocessing video tutorials are on the MINDLab dropbox
 
 </details>
 
-## Dependencies, Toolboxes and Versions:
+<details><summary>
+
+## Requirements and Dependencies:
+
 * MATLAB -- analyses run on version 2024a
 * RStudio
 * MIRtoolbox (includes Auditory Toolbox)
 * EEGlab
+
+</summary>
+
+<details><summary>
+
+## Instructions for running examples:
+
+1. Make sure toolboxes are installed (see above).
+2. Run `THAMP_PLV.m` section by section in MATLAB. 
+	* add MIRToolbox and EEGlab to your MATLAB path: `addpath(path/to/toolbox)`
+	* This script uses the example preprocessed EEG data found in the `example_EEG_data` folder, iterating through 10 participants. You should be able to reproduce a phase-locking value over normalized figure and export data for further visualization and modeling in R `THAMP_R_EEG.R`. 
+3. `THAMP_R_EEG.R`
+	* You may run into packages that need to be installed through R Studio. Use the command: `install.packages("{package_name}")`
+	* Reproduce plots that break down mod-PLV by ASRS and eBMRQ scores
+
+
+</summary>
