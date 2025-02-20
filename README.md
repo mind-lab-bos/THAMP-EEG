@@ -58,6 +58,7 @@ Arun's preprocessing video tutorials are on the MINDLab dropbox
 * EEGlab
 
 </summary>
+</details>
 
 <details><summary>
 
@@ -73,3 +74,4 @@ Arun's preprocessing video tutorials are on the MINDLab dropbox
 
 
 </summary>
+</details>
