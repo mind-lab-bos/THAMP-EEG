@@ -4,7 +4,9 @@ Scripts for preprocessing and analysis of EEG Data for the THAMP project. More p
 
 Arun's preprocessing video tutorials are on the MINDLab dropbox
 <details><summary>
+
 ## File Structure:
+
 </summary>
 - README.md
 - 'THAMP Overview Document.pdf' -> original project procedure, guidelines, pipelines and data processing.
@@ -39,6 +41,7 @@ Arun's preprocessing video tutorials are on the MINDLab dropbox
 	4. THAMPcalcPSD_1stlvl.m
 	5. THAMPcalcPSD_2ndlvl.m
 	6. THAMPcalcPSD_2ndlvl_bytask.m
+
 </details>
 
 ## Dependencies, Toolboxes and Versions:
