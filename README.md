@@ -1,6 +1,34 @@
 # THAMP-EEG
-Instructions for recruiting/running participants can be found in the THAMP sub-page of the lab wiki. This repo contains instructions and code involved in the preprocessing and analysis of the data.
 
-Preprocessing and Analysis guide can be found in the THAMP Overview Document https://docs.google.com/document/d/1EL8839oqc8otykgAeb8aCeg1eMtUUXese7bMQRwbxTM/edit?usp=drivesdk
+Scripts for preprocessing and analysis of EEG Data for the THAMP project. More project-general information can be found on the [MIND Lab WIKI](https://github.com/mind-lab-bos/labwiki/wiki). 
 
-Arun's video tutorials are here: https://www.dropbox.com/scl/fo/yb8fdt498w188nj9jjzz1/AGJp2tRyFX8qOhGZRmSPpB4?rlkey=zy9bgi6e68hjeujbiceausf47&e=1&st=he2b92j1&dl=0
+Arun's preprocessing video tutorials are on the MINDLab dropbox
+
+## Files:
+---**preprocessing**:
+	1. THAMP_preprocess_updated.m
+	2. THAMP_prune_trigs.m
+	3. THAMP_compile_analysis_dir.m
+	4. THAMP_standardize_EEG.m
+---**analysis**: 
+	1. THAMP_PLV_analyses.m
+	2. THAMP_PLV_over_time.m
+	---**PLV_R**:
+		1. THAMP_R_PLV.m
+		2. THAMP_R_EEG.R
+---**old_scripts**:
+	1. Jakob_THAMP_Preprocessing.m
+	2. chanlabels64.m
+	3. calcPSD.m
+	4. THAMPcalcPSD_1stlvl.m
+	5. THAMPcalcPSD_2ndlvl.m
+	6. THAMPcalcPSD_2ndlvl_bytask.m
+---**example_data**:
+
+---**mat_files**:
+
+---**metadata**:
+	1. THAMP_eeg_scored_qualtrics.csv
+	2. qualtrics.csv
+---'THAMP Overview Document.pdf'
+	-> original project procedure, guidelines, pipelines and data processing.
