@@ -1,12 +1,13 @@
 %% THAMP PLV analysis
-
 % Arun Asthagiri
+% Navigate this script within the home THAMP-EEG directory
 
 
-path_to_data = '/Users/arun/Documents/MINDLab/THAMP/EEG_Data/analyzed/final_analyzed';
-song_folder = '/Users/arun/Documents/MINDLab/THAMP/Song Library/normalized_3_21_mp3_4_28';
-qualtrics_table = readtable('/Users/arun/Documents/MINDLab/THAMP/THAMP_eeg_scored_qualtrics.csv');
-thamp_song_library = readtable("/Users/arun/Documents/MINDLab/THAMP/THAMP Song Library.xlsx", "NumHeaderLines",0, "VariableNamingRule","preserve");
+addpath('./analysis','./metadata', './example_EEG_data', './stimuli' )
+path_to_data = './example_EEG_data';
+song_folder = './stimuli/normalized_3_21_mp3_4_28';
+qualtrics_table = readtable('./metadata/THAMP_eeg_scored_qualtrics.csv');
+thamp_song_library = readtable("./metadata/THAMP Song Library.xlsx", "NumHeaderLines",0, "VariableNamingRule","preserve");
 addpath(song_folder)
 
 numBins = 101; % number of frequencies (frequency resolution)
