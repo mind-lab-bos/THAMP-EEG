@@ -56,7 +56,7 @@ Arun's preprocessing video tutorials are on the MINDLab dropbox
 ## Requirements and Dependencies:
 
 </summary>
-* MATLAB -- runs on version 2024a
+* MATLAB -- code tested on version 2024a
 * RStudio -- R Version 4.4.1
 * [MIRtoolbox 1.8.2](https://www.jyu.fi/hytk/fi/laitokset/mutku/en/research/materials/mirtoolbox) (Lartillot & Toiviainen) (installation includes Auditory Toolbox)
 * [EEGLAB](https://sccn.ucsd.edu/eeglab/index.php) (Delorme & Makeig, 2004)
@@ -73,7 +73,7 @@ Arun's preprocessing video tutorials are on the MINDLab dropbox
 </summary>
 
 1. Verify that toolboxes are installed (see above).
-2. Download the `example_EEG_data` and `metadata` folders from the Dropbox link. 	Move both folders into the `THAMP-EEG` folder (the present Github project). 
+2. Download the `example_EEG_data` and `metadata` folders from the `SONY Materials` Dropbox folder. Move both folders into the `THAMP-EEG` folder (that houses the present Github project). 
 3. Run `THAMP_PLV.m` section by section in MATLAB. 
 	* This script uses the preprocessed example EEG data found in the `example_EEG_data` folder, iterating through 10 participants. You should be able to reproduce a "phase-locking value over normalized frequency" figure and export data to R before running `THAMP_R_EEG.R`.
 	* navigate to the THAMP-EEG directory within MATLAB before running the script. 
@@ -83,6 +83,6 @@ Arun's preprocessing video tutorials are on the MINDLab dropbox
 4. `THAMP_R_EEG.R`
 	* This script loads in PLV and RTCV data saved out from the MATLAB analysis for statistical models and plotting with ASRS and eBMRQ. Current data are already saved out so there is no need to run the MATLAB script before this one.
 	* You may run into packages that need to be installed through R Studio. Use the command: `install.packages("{package_name}")`
-	* Reproduce plots that model PLV+RTCV by ASRS and eBMRQ scores
+	* Reproduces plots and models for relationships between PLV+RTCV and ASRS+eBMRQ.
 
 </details>
