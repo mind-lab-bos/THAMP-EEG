@@ -1,8 +1,9 @@
 %% THAMP PLV analysis
 % Arun Asthagiri
-% Navigate this script within the home THAMP-EEG directory
 
+% Step 1: Move your current MATLAB path to the THAMP-EEG directory
 
+% set up paths (relative to THAMP-EEG folder)
 addpath('./analysis','./metadata', './example_EEG_data', './stimuli' )
 path_to_data = './example_EEG_data';
 song_folder = './stimuli/normalized_3_21_mp3_4_28';
@@ -10,18 +11,18 @@ qualtrics_table = readtable('./metadata/THAMP_eeg_scored_qualtrics.csv');
 thamp_song_library = readtable("./metadata/THAMP Song Library.xlsx", "NumHeaderLines",0, "VariableNamingRule","preserve");
 addpath(song_folder)
 
+%% BEGIN Phase-Locking ANALYSIS
+
+% hyper parameters for PLV
 numBins = 101; % number of frequencies (frequency resolution)
-lowFreq = 0.2;
-low_norm = .1;
-high_norm = 10.1; % normalization bounds
-highFreq = 20.2;
-fois = linspace(lowFreq, highFreq, numBins); % frequency values at which we calculate PLV
+low_norm = .1; % normalization lower limit
+high_norm = 10.1; % normalization upper limit
 norm_fois = linspace(low_norm, high_norm, numBins); % normalized frequency ratios at which we calculate PLV
-cycles = 5; % determines resolution of wavelet
+cycles = 5; % determines frequency resolution of wavelet convolution
 
 num_electrodes = 61;
 
-%%
+%% Get Participant IDs from example EEG data folder
 participantIDs = string({dir(path_to_data).name});
 participantIDs = participantIDs(~contains(participantIDs, "."));
 numParticipants = length(participantIDs);
@@ -32,7 +33,7 @@ norm_unmod_aggregateChannelPLVs = nan(numParticipants,3, numBins, num_electrodes
 asrs_scores = nan(numParticipants,1);
 ebmrq_scores = nan(numParticipants,1);
 
-%% Iterate through participants
+%% PLV: Iterate through participants
 for participant_idx = 1:numParticipants
     participantID = participantIDs{participant_idx};
     disp(strcat("processing participant: ", participantID))
@@ -43,6 +44,7 @@ for participant_idx = 1:numParticipants
         disp("qualtrics data not found")
     end
     
+    % read in song order
     songs = readtable(fullfile(path_to_data,participantID, "song_order.csv"));
     sart_conditions = strcmp(string([songs.task]), "SART");
     mod_idxs = strcmp(string([songs.condition]), "Mod"); mod_idxs = mod_idxs & sart_conditions;
@@ -63,14 +65,14 @@ for participant_idx = 1:numParticipants
                 error("unrecognized condition")
         end
         disp(strcat("   processing ", song_name));
-        %% 
+        %% use MIR toolbox to filter audio and extract envelope
         audio = miraudio(char(fullfile(song_folder, song_name)), 'Extract', 0, 60.8, 's'); % trim to 60.8 seconds
         filt = mirfilterbank(audio, 'Gammatone');
         env = mirenvelope(filt, 'Sampling', 500);
         sum_bands = mirsum(env);
         filterbank_audio_data = get(sum_bands,'Data'); filterbank_audio_data = filterbank_audio_data{1}{1};
         filterbank_sr = get(sum_bands, 'Sampling'); filterbank_sr = filterbank_sr{1};
-        %%
+        %% load EEG data
         EEG = pop_loadset('filename',['EEG' num2str(song_idx) '.set'],'filepath', char(fullfile(path_to_data, participantID, "finalEEGs")));
         audio_signal = filterbank_audio_data;
         audio_fs = 500;
@@ -78,19 +80,16 @@ for participant_idx = 1:numParticipants
             error("sampling rate mismatch")
         end
         eegdata = EEG.data';
-        % %% laplacian
-        % [surf_lap,G,H] = laplacian_perrinX(EEG.data,[EEG.chanlocs.X],[EEG.chanlocs.Y],[EEG.chanlocs.Z]); 
-        % eegdata = surf_lap';
-        %%
-        
-        % Trim
+       
+        % trim audio and eeg data so length matches
         if abs(length(eegdata) - length(audio_signal))/audio_fs > 1, error("length mismatch"), end % if the files are more than 1 second different in length
         if length(eegdata) > length(audio_signal)
             eegdata = eegdata(1:length(audio_signal),:);
         else
             audio_signal = audio_signal(1:length(eegdata));
         end
-        % calc norm_PLVs
+
+        % calc norm_PLVs. See eegConvolution function at bottom of script. 
         for freq_idx = 1:numBins
             [EEG_phases, ~] = eegConvolution(eegdata,cycles,norm_freqs(freq_idx),EEG.srate); % convolve with EEG
             [Audio_phases, ~] = eegConvolution(audio_signal,cycles,norm_freqs(freq_idx),audio_fs); % convolve with Audio
@@ -105,10 +104,7 @@ for participant_idx = 1:numParticipants
     norm_unmod_aggregateChannelPLVs(participant_idx,:,:,:) = norm_aggregateChannelPLVs(unmod_idxs, :,:);
 end
 
-%%
-% writematrix([participantIDs' asrs_scores ebmrq_scores],"bmrq.csv")
-% save("all_SART_PLVs", "norm_mod_aggregateChannelPLVs", "norm_unmod_aggregateChannelPLVs")
-%% RTCV
+%% Analyze RTCV from EEG data
 
 mod_SART_RT = nan(numParticipants, 3);
 unmod_SART_RT = nan(numParticipants, 3);
@@ -142,7 +138,7 @@ for participant_idx = 1:numParticipants
             error("sampling rate mismatch")
         end
         
-        % prune EEG events
+        % Get EEG events for SART trials
         event_numbers = str2double(string(regexprep({EEG.event(:).type}, '[A-Za-z ]', ''))); % remove letters
         event_latencies = [EEG.event.latency]/500; % in seconds % makes the assumption that units of EEG.event.latency is samples
         
@@ -150,7 +146,7 @@ for participant_idx = 1:numParticipants
             error("event latencies weren't calculated correctly")
         end
 
-        % remove consecutive duplicates
+        % remove consecutive duplicates for triggers
         compiled_trigs = [];
         index = 1;
         while index <= length(EEG.event)
@@ -167,9 +163,11 @@ for participant_idx = 1:numParticipants
         % calc RTCV for whole song
         RTs = [];
         data = compiled_trigs;
+        % Get reaction times as difference between latencies of stimulus
+        % presentation and hits
         for trial_idx = 1:size(data,1)-1
             if data(trial_idx, 1) ~= 3 && data(trial_idx, 1) ~= 10 && data(trial_idx+1, 1) == 10
-                RTs = [RTs; data(trial_idx+1, 2) - data(trial_idx, 2)];
+                RTs = [RTs; data(trial_idx+1, 2) - data(trial_idx, 2)]; 
             end
         end
         RT = mean(RTs);
@@ -189,19 +187,18 @@ for participant_idx = 1:numParticipants
     
     end
 end
-%% save out to R
-% writematrix([participantIDs' asrs_scores ebmrq_scores],"qualtrics.csv")
+%% save data out to R. Remember to update paths in R to locate the exported files. 
+writematrix([participantIDs' asrs_scores ebmrq_scores],"qualtrics.csv")
 sart_mod_PLV_modfreq = squeeze(norm_mod_aggregateChannelPLVs(:,:,norm_fois==4,:));
 sart_unmod_PLV_modfreq = squeeze(norm_unmod_aggregateChannelPLVs(:,:,norm_fois==4,:));
-% save("PLV_to_R", "sart_mod_PLV_modfreq", "sart_unmod_PLV_modfreq", "mod_SART_RT", "mod_SART_RTCV", "unmod_SART_RT", "unmod_SART_RTCV");
+save("PLV_to_R", "sart_mod_PLV_modfreq", "sart_unmod_PLV_modfreq", "mod_SART_RT", "mod_SART_RTCV", "unmod_SART_RT", "unmod_SART_RTCV");
 
-%% shaded error plot
+%% PLOT PLVs
 
 figure;
 hold on;
-% 
-% hp = patch([8 8 9.6 9.6],[0 .14 .14 0],'k',...
-%     'facecolor',[.5 .5 .5],'facealpha', 0.2,'edgecolor','none', 'HandleVisibility', 'off') ;
+
+% Requires the shadedErrorBar package 
 shadedErrorBar(norm_fois,mean(norm_mod_aggregateChannelPLVs, [1 2 4]),std(mean(norm_mod_aggregateChannelPLVs, [2 4]))/sqrt(size(norm_mod_aggregateChannelPLVs, 1)),'lineprops',{'Color',[.8 0 0],'LineWidth',4,'DisplayName',"Mod"})
 shadedErrorBar(norm_fois,mean(norm_unmod_aggregateChannelPLVs, [1 2 4]),std(mean(norm_unmod_aggregateChannelPLVs, [2 4]))/sqrt(size(norm_mod_aggregateChannelPLVs, 1)),'lineprops',{'Color',[.7 .4 0],'LineWidth',4,'DisplayName',"Unmod"})
 xline(4, "-", "mod rate", "LineWidth",1.5, "Color", "k", "LabelVerticalAlignment", "bottom", "LabelHorizontalAlignment","left", "HandleVisibility","off");
@@ -216,6 +213,14 @@ title("Phase-locking Values at Multiples of the Beat Rate")
 set(gcf, "color", "w")
 
 fontsize(16, "points")
+
+%%
+%{
+
+The following section is for the PLV and RTCV over time analysis.
+
+
+%}
 
 
 %% PLV over Time

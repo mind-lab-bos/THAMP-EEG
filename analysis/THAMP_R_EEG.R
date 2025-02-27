@@ -2,20 +2,27 @@
 THAMP_R_EEG.R
 Arun Asthagiri
 01-21-2025
+Plotting RTCV, PLV and behavioral results
 "
 
-library(R.matlab)
+# set up paths
+base_THAMP_path <- "/path/to/THAMP-EEG/"
+# IMPORTANT: Update this path ^^^^^^
 
-mat_filepath = "./../mat_files/"
-filename = "PLV_to_R.mat"
-filename_plv = "PLV_to_R.mat"
-data <- readMat(paste(mat_filepath, filename, sep=""))
-data_PLV <- readMat(paste(mat_filepath, filename_plv, sep=""))
+
+# Read in data
+library(R.matlab)
+mat_filepath <- "mat_files/"
+filename <- "PLV_to_R.mat"
+filename_plv <- "PLV_to_R.mat"
+data <- readMat(paste(base_THAMP_path, mat_filepath, filename, sep=""))
+data_PLV <- readMat(paste(base_THAMP_path, mat_filepath, filename_plv, sep=""))
 
 library(tidyr)
 library(reshape2)
 library(dplyr)
 
+# load in data
 mod_RT <- melt(data$mod.SART.RT) %>% 
   setNames(c("sub.idx","song.num", "RT"))
 
@@ -47,17 +54,16 @@ unmod_data <- unmod_RT %>%
 all_data<-rbind(mod_data, unmod_data)
 
 mean_electrode_data<-all_data %>% 
-  # mutate(RTCV = log1p(RTCV)) %>% 
   group_by(sub.idx, song.num, condition) %>% 
   mutate(m_PLV = (mean(PLV))) %>% 
   select(-c(electrode, PLV)) %>% 
   distinct() %>% ungroup() %>%
   group_by(sub.idx) 
-# mutate(m_PLV = m_PLV-mean(m_PLV)) %>%
-# mutate(RTCV = RTCV-mean(RTCV))
-metadata_filepath <- "./../metadata/"
+
+# load in survey metadata
+metadata_filepath <- "metadata/"
 qualtrics_filename<- "qualtrics.csv"
-data_qualtrics <- read.csv(paste(metadata_filepath, qualtrics_filename,sep=""), header=FALSE)
+data_qualtrics <- read.csv(paste(base_THAMP_path, metadata_filepath, qualtrics_filename,sep=""), header=FALSE)
 colnames(data_qualtrics) <- c("participantID", "ASRS", "eBMRQ")
 data_qualtrics<-data_qualtrics %>% mutate(sub.idx = row_number())
 mean_electrode_data<-mean_electrode_data%>%merge(data_qualtrics, by=c("sub.idx"))%>%
@@ -67,12 +73,7 @@ mean_electrode_data$condition <- relevel(as.factor(mean_electrode_data$condition
 mean_electrode_data<-mean_electrode_data %>% mutate(eBMRQ.tertile = factor(ntile(eBMRQ,3)))
 levels(mean_electrode_data$eBMRQ.tertile) <- c("Low", "Med", "High")
 levels(mean_electrode_data$ASRS) <- c("ASRS.Negative","ASRS.Positive")
-# rescale variables
-# mean_electrode_data$RTCV <- scale(mean_electrode_data$RTCV, center = FALSE, scale = max(mean_electrode_data$RTCV))
-# mean_electrode_data$m_PLV <- scale(mean_electrode_data$m_PLV, center = FALSE, scale = max(mean_electrode_data$m_PLV))
 mean_electrode_data$eBMRQ <- scale(mean_electrode_data$eBMRQ, center = TRUE, scale = max(mean_electrode_data$eBMRQ))
-
-
 
 
 library(ggplot2)
@@ -86,18 +87,6 @@ ggplot(mean_electrode_data, aes(x=condition, y=m_PLV, color=condition)) +
   geom_jitter() +
   geom_line(aes(group = sub.idx), color = "black", alpha = 0.1) 
 
-library(see)
-ggplot(mean_electrode_data, aes(x=condition, y=m_PLV, color=condition)) +
-  geom_violinhalf(aes(group = interaction(condition, ASRS))) +
-  theme_classic()
-
-ggplot(mean_electrode_data, aes(x=condition, y=m_PLV, fill=ASRS)) +
-  geom_violinhalf(aes(group = interaction(condition, ASRS)), 
-                  position = position_dodge(width = 0.3), 
-                  alpha = 0.5) +
-  theme_classic() +
-  labs(x = "Condition", y = "m_PLV", fill = "ASRS Group")
-  geom_jitter() 
   
 library(gghalves)
 ggplot(data=mean_electrode_data, 
@@ -108,7 +97,7 @@ ggplot(data=mean_electrode_data,
     theme_classic() +
     labs(x = "Condition", y = "m_PLV", fill = "ASRS Group")
   
-# IMPORTANT PLOT
+# IMPORTANT PLOT: PLV by eBMRQ and ASRS
 ggplot(data=mean_electrode_data%>%filter(condition=="Mod"), 
   aes(x=eBMRQ.tertile, y=m_PLV, split = ASRS, fill=ASRS)) +
   geom_half_violin(
@@ -144,6 +133,7 @@ ggplot(mean_electrode_data%>%filter(condition=="Mod"), aes(x=m_PLV, y=RTCV, colo
   scale_color_brewer(palette = "Paired")
 
 
+# Important plot: PLV vs RTCV
 ggplot(mean_electrode_data%>%filter(condition=="Mod"), aes(x=m_PLV, y=RTCV)) +
   geom_point() +
   stat_smooth(method = "lm") +
@@ -151,19 +141,11 @@ ggplot(mean_electrode_data%>%filter(condition=="Mod"), aes(x=m_PLV, y=RTCV)) +
   scale_color_brewer(palette = "Paired")
 
 
+# Statistical modeling
 library(lme4)
 library(lmerTest)
 library(emuR)
 library(pracma)
-
-
-
-t.test(filter(mean_electrode_data, condition=="Mod")$RTCV, filter(mean_electrode_data, condition=="Unmod")$RTCV, alternative="less",paired=TRUE)
-model.out <- lm(RTCV~m_PLV, data=mean_electrode_data)
-
-
-model.out <- lmer(RTCV~m_PLV*condition + (1|sub.idx), data=mean_electrode_data)
-summary(model.out)
 
 # Important GLM Model
 model.out <- glm(RTCV~m_PLV,family=Gamma(link = "log"), data=mean_electrode_data%>%filter(condition=="Mod"))
